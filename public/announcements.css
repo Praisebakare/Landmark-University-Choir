@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins';
+    text-decoration: none;
+    list-style-type: none;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+a{
+    text-decoration: none;
+}
+:root{
+    --main-color: #6b2737;
+    --color-dark: #1d2231;
+    --text-grey: #8390A2;
+}
+.sidebar{
+    position: fixed;
+    background-color: var(--main-color);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    padding: 12px 1px 12px 12px;
+    z-index: 100;
+    transition: width .7s;
+    border-radius: 0 30px 0 0;
+}
+.menu{
+    color: #fff;
+    position: absolute;
+    left: 20%;
+    top: 2%;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.sidebar-brand{
+    height: 90px;
+    padding: 1rem 0rem 1rem 2rem;
+}
+.sidebar-brand a{
+    color: var(--text-grey);
+}
+.sidebar .sidebar-brand a span:last-child,
+.sidebar li a span:last-child{
+    display: none;
+}
+.sidebar-brand span{
+    font-size: 16px;
+}
+.sidebar-menu li{
+    width: 100%;
+    margin-bottom: 4rem;
+}
+
+#nav-toggle:checked + .sidebar{
+    width: 320px;
+    border-radius: 0;
+}
+#nav-toggle:checked + .sidebar .sidebar-brand .menu{
+    left: 40%;
+}
+#nav-toggle:checked + .sidebar .sidebar-menu ul li a{
+    display: flex;
+    gap: 12px;
+}
+#nav-toggle:checked + .sidebar .sidebar-brand a span:last-child,
+#nav-toggle:checked + .sidebar li a span:last-child{
+    display: flex;
+}
+#nav-toggle:checked ~ .main-content{
+    margin-left: 320px;
+}
+#nav-toggle:checked ~ .main-content header{
+    width: calc(100% - 320px);
+    left: 320px;
+}
+.sidebar-menu a{
+    padding-left: 1rem;
+    display: block;
+    font-size: 1rem;
+    color: #fff;
+}
+.msg{
+    color: blue;
+}
+.sidebar-menu a.active1{
+    background: #fff;
+    color: var(--main-color);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 30px 0px 0px 30px;
+}
+.sidebar-menu a span:first-child{
+    font-size: 1.2rem;
+    padding-right: 1rem;
+}
+
+
+
+header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 70px;
+    width: calc(100% - 70px);
+    z-index: 100;
+    transition: left .7s;
+}
+header label i{
+    padding-right: 2rem;
+    font-size: 20px;
+    margin: auto;
+}
+
+.search-wrapper{
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    height: 40px;
+    overflow-x: hidden;
+    margin-top: 15px;
+}
+.search-wrapper i{
+    padding: 0rem 1rem;
+    display: inline;
+}
+.search-wrapper input{
+    border: none;
+    outline: none;
+    height: 100%;
+    padding: .5rem;
+}
+.user-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: 40px;
+}
+
+.user-wrapper i{
+    font-size: 40px;
+    text-align: center;
+}
+.user-wrapper small{
+    display: inline-block;
+    color: var(--text-grey);
+}
+
+
+
+@media only screen and (max-width: 960px){
+   
+    .search-wrapper{
+        display: none;
+    }
+    .main-content header h1{
+        display: none;
+    }
+    .user-wrapper{
+        gap: 2px;
+        margin-left: 70%;
+    }
+}
+
+@media only screen and (max-width: 680px){
+    .search-wrapper{
+        display: none;
+    }
+    .main-content header h1{
+        display: none;
+    }
+    .user-wrapper{
+        gap: 2px;
+        margin-left: 70%;
+    }
+    .user-wrapper i{
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 480px){
+    .user-wrapper{
+        gap: 2px;
+        margin-left: 50%;
+    }
+    header{
+        gap: 12px;
+    }
+    .menu{
+        left: 20%;
+
+    }
+    .card-single h3{
+        font-size: 12px;
+    }
+    .inside-header button{
+        padding: .4rem;
+        font-size: .6rem;
+    }
+    .inside-header h4{
+        font-size: 12px;
+    }
+    tr td{
+        font-size: 12px;
+    }
+    .inside-card .mission h4,
+    .inside-card .vision h4{
+        font-size: 12px;
+    }
+    .inside-card .mission p,
+    .inside-card .vision p{
+        font-size: 12px;
+    }
+    .inside-card .vision{
+        margin-top: 17px;
+    }
+}
+
+
+/* Annoucement */
+
+main{
+    margin-top: 70px;
+    padding: 2rem 1.5rem;
+    background: #f0f0f0;
+    min-height: calc(100vh - 90px);
+}
+.main-content{
+    margin-left: 80px;
+}
+.main-inside{
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    gap: 90px;
+}
+.inside-annouce{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    height: 100%;
+    margin-top: 20px;
+}
+.annoucement,
+.song,
+.dress-code{
+    background: #fff;
+    margin: auto;
+    text-align: center;
+    margin-top: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+    font-size: 1rem;
+}
+.annoucement h4,
+.song h4,
+.dress-code h4{
+    color: var(--text-grey);
+}
+.inside-chat{
+    background: #fff;
+    margin-right: 100px;
+    padding: .7rem 5rem;
+    border-radius: 15px;
+
+}
+.inside-chat h4{
+    text-align: center;
+    margin: auto;
+    color: var(--text-grey);
+}
+form .user-details{
+    margin-top: 20px;
+    max-width: 700px;
+    width: 100%;
+    margin: auto;
+}
+form .user-details .input-box{
+    display: flex;
+    flex-direction: column;
+}
+form .user-details .input-box label{
+    width: 100%;
+    margin-bottom: 3px;
+    margin-top: 5px;
+}
+form .user-details .input-box input, textarea{
+    border: 1px solid #aaa;
+    outline: none;
+    padding: 12px;
+    border-radius: 5px;
+}
+.btn{
+    display: flex;
+    gap: 5px;
+    margin: auto;
+    margin-top: 7px;
+    text-align: center;
+    padding: 6px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #aaa;
+    background-color: var(--main-color);
+    color: #fff;
+    cursor: pointer;
+}
+
+
+@media only screen and (max-width: 1000px){
+    .main-inside{
+        display: flex;
+        flex-direction: column;
+    }
+    .inside-chat{
+        margin-right: 0;
+        padding: 1rem;
+    }
+}

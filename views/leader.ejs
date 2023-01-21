@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabarnacle of Psalms</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+    <link rel="stylesheet" href="/static/leader.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+</head>
+<body>
+   
+    <input type="checkbox" id="nav-toggle">
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <label class="menu" for="nav-toggle">
+                <i class="bi bi-list" id="btn"></i>
+            </label>
+            <a href="/Member">
+                <span class="logo-content">LMU.CHOIR</span>
+            </a>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/Member">
+                        <i class="bi bi-columns-gap"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Choir/leaders" >
+                        <i class="bi bi-briefcase"></i>
+                        <span>Team Leaders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Choir/Announcement" >
+                        <i class="bi bi-megaphone"></i>
+                        <span>Announcements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/Attendance">
+                        <i class="bi bi-fingerprint"></i>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/changepassword" >
+                        <i class="bi bi-person-lock"></i>
+                        <span>Change Password</span>
+                    </a>        
+                </li>
+                <li>
+                    <a href="/Member/Updateinfo">
+                        <i class="bi bi-three-dots"></i>
+                        <span>Update Information</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/au/logout" >
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <h1>Dashboard</h1>
+            
+            <!-- <div class="search-wrapper">
+                <i class="bi bi-search"></i>
+                <input type="search" placeholder="Search anything">
+            </div> -->
+            <div class="user-wrapper">
+                <div class="img">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div>
+                    <h5><%= user %> </h5>
+                    <small><%= userpart %></small><br>
+                    <small><%= level %> Level</small>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="title">
+                <h2>Team Leaders</h2>
+            </div>
+            <div class="table1">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Mail</td>
+                            <td>Post</td>
+                            <td>Level</td>
+                        </tr>
+                    </thead>
+                    <% exco.forEach(element=> { %>
+                        <tbody>
+                            <tr>
+                                <td data-label="Name: ">
+                                    <%= element.firstname %> <%= element.lastname %>
+                                </td>
+                                <td data-label="Mail: ">
+                                    <%= element.email %> 
+                                </td>
+                                <td data-label="Post: ">
+                                    <%= element.post %>
+                                </td>
+                                <td data-label="Level: ">
+                                    <%= element.level %>
+                                </td>
+                            </tr>
+                        </tbody>
+                     <% }) %>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

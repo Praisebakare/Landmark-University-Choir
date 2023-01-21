@@ -1,0 +1,16 @@
+#printDateTime {
+    display: none;
+  }
+
+  @media print {
+    #printDateTime {
+      display: block;
+    }
+  }
+
+  #printDateTime {
+    display: none;
+    color: red;
+    font-size: 12px;
+  }
+  

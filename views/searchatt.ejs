@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>TABERNACLE OF PSALMS</title>
+		<link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+		<link rel="manifest" href="/static/favicon_io/site.webmanifest">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<style rel="stylesheet" href="/static/style3.css"></style>
+		<script src="/static/script3.js"></script>
+	</head>
+	<body>
+		<header>
+			<a href="/Admin">Home</a>
+		</header>
+		<h1>Tabernacle of Psalms</h1>
+		<% if (locals.message) { %>
+			<%= message %> 
+		<% } %>
+		<form action="/Admin/Att/View" method="post">
+			<input type="date" id="date" placeholder="Enter date(YYYY-MM-DD)" name="date">
+			<button type="submit">View</button>
+		</form>
+	</body>
+</html>

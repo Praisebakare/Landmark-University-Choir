@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Tabarnacle of Psalms</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins';
+}
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, .15);  
+    backdrop-filter: blur(5px);
+    background-image: url(/static/images/1.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.logo img{
+        width: 180px;
+       }
+       .logo{
+        margin-right: auto; 
+        margin-left: 40px;
+        margin-top: -20px;
+       }
+       .header{
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        margin: 41px 12px;
+        max-width: 100vw;
+       }
+       
+       
+    .menu-down{
+        display: flex;
+        flex-direction: column;
+        margin-right: 24px;
+        opacity: 0;
+        z-index: 1;   
+        transition: .6s all;
+        position: absolute;
+        top: 10%;
+        right: -2%;
+    }
+    .join:hover .menu-down{
+        opacity: 1;
+    }
+    .join:hover .menu{
+        display: none;
+    }
+    .menu-down button{
+        align-items: center;
+        justify-content: center;
+        padding: 12px 32px;
+        outline: none;
+        border: none;
+        background: none;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        transition: 0.6s all;
+       }
+       .menu-down button:hover{
+        background-color: rgb(255, 228, 196);
+       }
+       .menu-down button a{
+        text-decoration: none;
+        text-align: center;
+        color: #000;
+        font-weight: 700;
+       }
+       .menu{
+        text-align: center;
+        position: absolute;
+        top: 10%;
+        right: 6%;
+       }
+       .menu  i{
+        font-size: 30px;
+       }
+.container{
+    background: #ffffff;
+    position: relative;
+    max-width: 800px;
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+    padding: 30px;
+    margin: 0 15px;
+    border-radius: 10px;
+}
+.container header{
+    font-size: 20px;
+    font-weight: 700;
+    color: #344;
+    position: relative;
+}
+.title span{
+    font-size: 16px;
+    font-weight: 400;
+    color: red;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+.container header::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 3px;
+    width: 27px;
+    background-color: rgba(101, 3, 3, 0.301);
+}
+.container form{
+    min-height: 490px;
+    position: relative;
+}
+.container form .details{
+    margin-top: 30px;
+}
+
+.container form .title{
+    font-size: 15px;
+    font-weight: 500;
+    color: #334;
+    margin: 6px 0;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.container form .fields{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.container form .input-fields{
+    display: flex;
+    flex-direction: column;
+    width: calc(100% / 3 - 15px);
+    margin: 4px 0;
+}
+.special{
+    width: calc(100% / 2 - 15px);
+}
+.input-fields .input{
+    height: 40px;
+    margin: 8px 0;
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 400;
+}
+.input-fields .input:is(:focus, :valid){
+    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
+}
+.input-fields label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #2e2e2e;
+}
+.second{
+    display: none;
+    transition: 2s all linear;
+}
+input[type='radio']{
+    cursor: pointer;
+}
+.container form button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 45px;
+    max-width: 200px;
+    background-color: #333;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: #f3f3f3;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .5s linear;
+}
+.container form button:hover{
+    background-color: rgb(2, 2, 14);
+}
+button i{
+    margin:  0 5px;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+}
+.buttons button{
+    margin-right: 14px;
+}
+.error-msg{
+    font-size: 15px;
+    color: red;
+}
+@media (max-width: 800px) {
+    .container form .input-fields{
+    width: calc(100% / 2 - 15px);
+}
+}
+@media (max-width: 580px) {
+    .container form .input-fields{
+    width: calc(100% / 1 - 15px);
+}
+.buttons .btnText{
+    font-size: 12px;
+}
+.menu-down{
+    right: -9%;
+    top: 3%;
+}
+}
+@media (max-width: 400px) {
+    .menu-down{
+        right: -13%;
+        top: 3%;
+    } 
+    .menu-down button{
+        padding: 10px 12px;
+    } 
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <% if (locals.details) { %>
+            <header style="position: relative;">
+                <div class="title">
+                    Update Bio-Data
+                    <span>
+                        <% if (locals.message) { %>
+                            <div class="error-msg">
+                                <%= message %>
+                            </div>
+                           <% } %>
+                    </span>
+                </div>
+                    <section class="header">
+                        <div class="join">
+                            <div class="menu"><i class="bi bi-list"></i></div>
+                            <div class="menu-down">
+                                <button><a href="/Member">Home</a></button>
+                            </div>
+                        </div>
+                    </section>
+            </header>
+            <form id="login-form" action="/Member/Updateinfo" method="POST">
+                <div class="form first" id="first">
+                    <div class="details personal">
+                        <span class="title">Personal Details</span>
+                        <div class="fields">
+                        
+                            <div class="input-fields">
+                                <label for="">Firstname</label>
+                                <input class="input" type="text" name="firstname" placeholder="<%= details.firstname %>" id="firstname">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Middlename</label>
+                                <input  class="input" type="text" name="middlename" placeholder="<%= details.middlename %>" id="middlename">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Lastname</label>
+                                <input class="input" type="text" name="lastname" placeholder="<%= details.lastname %>" id="lastname">
+                            </div>   
+                            <div class="input-fields">
+                                <label for="">Instagram Username</label>
+                                <input class="input" type="text" name="instagramID" placeholder="<%= details.instagramID %>" id="instagramID">
+                            </div>  
+                            <!-- <div class="input-fields">
+                                <label for="">Profile picture</label>
+                                <input class="input" type="file" name="file" id="file">
+                            </div>  -->  
+                        </div>
+                    </div>
+    
+                    <div class="details school">
+                        <span class="title">School Details</span>
+                        <div class="fields">
+                            <div class="input-fields">
+                                <label for="">Registration No.</label>
+                                <input class="input"type="text" name="regno" placeholder= "<%= details.regno %>" id="regno">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Matriculation No.</label>
+                                <input class="input"type="text" name="matricno" placeholder=<%= details.matricno %>  id="matricno">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Department</label>
+                                <input class="input" type="text" name="department" placeholder="Department" id="department">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Webmail</label>
+                                <input class="input" autocomplete="off" type="email" name="email" placeholder="<%= details.email %> " id="email">
+                            </div>   
+                            <div class="input-fields">
+                                <label for="">Phone Number</label>
+                                <input class="input" type="tel" name="phonenumber" placeholder="<%= details.phonenumber %> " id="phonenumber">
+                            </div>    
+                            <div class="input-fields">
+                                <label for="Male">Room Number</label>
+                                <input class="input" type="text" name="roomno" placeholder="<%= details.roomno %> " id="roomno">
+                            </div>       
+                        </div>
+                        <button class="nextBtn" type="button" 
+                        onclick="document.getElementById('first').style.display = 'none'
+                                 document.getElementById('second').style.display = 'block'"
+                        >
+                            <span class="btnText">Next</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- second part -->
+    
+                <div class="form second" id="second">
+                    <div class="details school2">
+                        <span class="title">School Details</span>
+                        <div class="fields">
+                            <div class="input-fields special">
+                                <p>College: <input type="text" name="college" id="college" placeholder= "<%= details.college  %>"> 
+                                </p>
+                            </div>
+                            <div class="input-fields special">
+                                <p>Select Your Level: <input type="text" name="level" id="level" placeholder= "<%= details.level  %> Level">
+                                </p>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+    
+                    <div class="details choir">
+                        <span class="title">Choir Details</span>
+                        <div class="fields">
+                            <div class="input-fields special">
+                                <p>Select Your Sub-Unit: <br>
+                                    <input type="radio" id="singer" name="subunit" value="Singer">
+                                    <label for="singer">Singer</label>
+                                    <input type="radio" id="instrumentalist" name="subunit" value="Instrumentalist">
+                                    <label for="instrumentalist">Instrumentalist</label>
+                                </p>
+                            </div>
+                            <div class="input-fields special" >
+                                <p>Select your part: <br>
+                                    Singer: <br>
+                                    <input type="radio" id="soprano" name="part" value="Soprano">
+                                    <label for="singer">Soprano</label>
+                                    <input type="radio" id="alto" name="part" value="Alto">
+                                    <label for="instrumentalist">Alto</label>
+                                    <input type="radio" id="tenor" name="part" value="Tenor">
+                                    <label for="tenor">Tenor</label><br>
+                                    <!-- <select name="part" >
+                                        <option value=""></option>
+                                        <option id="soprano" name="part" value="Soprano">Soprano</option>
+                                        <option id="alto" name="part" value="Alto">Alto</option>
+                                        <option id="tenor" name="part" value="Tenor">Tenor</option>
+                                    </select> -->
+                                    Instrumentalist: <br>
+                                    <input type="radio" id="guitar" name="part" value="Guitar">
+                                    <label for="singer">Guitar</label>
+                                    <input type="radio" id="bassguitar" name="part" value="Bass Guitar">
+                                    <label for="instrumentalist">Bass Guitar</label>
+                                    <input type="radio" id="keyboard" name="part" value="Keyboard">
+                                    <label for="tenor">Keyboard</label><br>
+                                    <input type="radio" id="drum" name="part" value="Drum">
+                                    <label for="tenor">Drum</label>
+                                    <input type="radio" id="brass" name="part" value="Brass">
+                                    <label for="tenor">Brass</label>
+                                    <input type="radio" id="others" name="part" value="Others">
+                                    <label for="others">Others</label>
+                                    <!-- <p>Others: <input type="text" name="part" id="others" placeholder="Others"></p> -->
+                                </p>
+                            </div>
+                            
+                        </div>
+                        <div class="buttons">
+                            <button class="prevBtn" type="button"
+                            onclick="document.getElementById('first').style.display = 'block'
+                                     document.getElementById('second').style.display = 'none'">
+                                <span class="btnText">Previous</span>
+                                <i class="bi bi-arrow-return-left"></i>                       
+                             </button>
+        
+                            <button class="nextBtn" type="submit">
+                                <span class="btnText">Update</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        <% } else { %>
+            <header style="position: relative;">
+                <div class="title">
+                    Registration
+                    <span>
+                        <% if (locals.message) { %>
+                            <div class="error-msg">
+                                <%= message %>
+                            </div>
+                           <% } %>
+                    </span>
+                </div>
+                    <section class="header">
+                        <div class="join">
+                            <div class="menu"><i class="bi bi-list"></i></div>
+                            <div class="menu-down">
+                                <button><a href="/">Home</a></button>
+                                <button><a href="/Member/au/Login">Login</a></button>
+                            </div>
+                        </div>
+                    </section>
+            </header>
+            <form id="login-form" action="/Register" method="POST">
+                <div class="form first" id="first">
+                    <div class="details personal">
+                        <span class="title">Personal Details</span>
+                        <div class="fields">
+                            <div class="input-fields">
+                                <label for="">Firstname</label>
+                                <input class="input" type="text" name="firstname" placeholder="First Name" id="firstname" required>
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Middlename</label>
+                                <input  class="input" type="text" name="middlename" placeholder="Middle Name" id="middlename" required>
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Lastname</label>
+                                <input class="input" type="text" name="lastname" placeholder="Last Name" id="lastname" required>
+                            </div>   
+                            <div class="input-fields">
+                                <label for="">Instagram Username</label>
+                                <input class="input" type="text" name="instagramID" placeholder="Instagram Username" id="instagramID" required>
+                            </div> 
+                            <!-- <div class="input-fields">
+                                <label for="">Profile picture</label>
+                                <input class="input" type="file" name="file" id="file">
+                            </div> -->   
+                            <div class="input-fields2">
+                                <label for="gender">Gender</label>
+                                <select class=".input" id="gender" name="gender">
+                                    <option value=""></option>
+                                    <option value="Male"  id="gender" name="gender" required>Male</option>
+                                    <option value="Female" id="gender" name="gender" required>Female</option>
+                                </select> 
+                            </div>  
+                            <!-- <div class="input-fields2">
+                                <label for="Male">Male</label>
+                                <input type="radio" value="Male" id="gender" name="gender" required>
+                            </div>    
+                            <div class="input-fields2">
+                                <label for="Female">Female</label>
+                                <input type="radio" value="Female" id="gender" name="gender" required>
+                            </div>  -->
+                        </div>
+                    </div>
+    
+                    <div class="details school">
+                        <span class="title">School Details</span>
+                        <div class="fields">
+                            <div class="input-fields">
+                                <label for="">Registration No.</label>
+                                <input class="input"type="text" name="regno" placeholder="Reg No" id="regno">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Matriculation No.</label>
+                                <input class="input"type="text" name="matricno" placeholder="Matric No" id="matricno">
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Department</label>
+                                <input class="input" type="text" name="department" placeholder="Department" id="department" required>
+                            </div>
+                            <div class="input-fields">
+                                <label for="">Webmail</label>
+                                <input class="input" autocomplete="off" type="email" name="email" placeholder="@lmu.edu.ng" id="email" required>
+                            </div>   
+                            <div class="input-fields">
+                                <label for="">Phone Number</label>
+                                <input class="input" type="tel" name="phonenumber" placeholder="Phone Number" id="phonenumber" required>
+                            </div>    
+                            <div class="input-fields">
+                                <label for="Male">Room Number</label>
+                                <input class="input" type="text" name="roomno" placeholder=" Hall - Room Number" id="roomno" required>
+                            </div>       
+                        </div>
+                        <button class="nextBtn" type="button" 
+                        onclick="document.getElementById('first').style.display = 'none'
+                                 document.getElementById('second').style.display = 'block'"
+                        >
+                            <span class="btnText">Next</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- second part -->
+    
+                <div class="form second" id="second">
+                    <div class="details school2">
+                        <div class="input-fields special">
+                            <label for="Female">Date of Birth</label>
+                            <input class="input" type="date" name="dob" placeholder="DD-MM-YYYY" id="dob" required>
+                        </div> 
+                        <span class="title">School Details</span>
+                        <div class="fields">
+                            <div class="input-fields special">
+                                <p>College: <br>
+                                    <!-- <label for="coe">COE</label>
+                                    <input type="radio" id="coe" name="college" value="COE">
+                                    <label for="cpas">CPAS</label>
+                                    <input type="radio" id="cpas" name="college" value="CPAS">
+                                    <label for="cas">CAS</label>
+                                    <input type="radio" id="cas" name="college" value="CAS">
+                                    <label for="cbs">CBS</label>
+                                    <input type="radio" id="cbs" name="college" value="CBS"> -->
+                                    <select name="college">
+                                        <option value=""></option>
+                                        <option value="CPAS" id="cpas" name="college">CPAS</option>
+                                        <option value="COE" id="coe" name="college">COE</option>
+                                        <option value="CBS" id="cbs" name="college">CBS</option>
+                                        <option value="CAS" id="cas" name="college">CAS</option>
+                                    </select>
+                                </p>
+                            </div>
+                            <div class="input-fields special">
+                                <p>Select Your Level: <br>
+                                    <!-- <input type="radio" id="l100" name="level" value="100">
+                                    <label for="l100">100</label>
+                                    <input type="radio" id="l200" name="level" value="200">
+                                    <label for="l200">200</label>
+                                    <input type="radio" id="l300" name="level" value="300">
+                                    <label for="l300">300</label>
+                                    <input type="radio" id="l400" name="level" value="400">
+                                    <label for="l400">400</label>
+                                    <input type="radio" id="l500" name="level" value="500">
+                                    <label for="l500">500</label> -->
+    
+                                    <select name="level">
+                                        <option value=""></option>
+                                        <option id="l100" name="level" value="100">100</option>
+                                        <option id="l200" name="level" value="200">200</option>
+                                        <option id="l300" name="level" value="300">300</option>
+                                        <option id="l400" name="level" value="400">400</option>
+                                        <option d="l500" name="level" value="500">500</option>
+                                    </select>
+                                </p>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+    
+                    <div class="details choir">
+                        <span class="title">Choir Details</span>
+                        <div class="fields">
+                            <div class="input-fields special">
+                                <p>Select Your Sub-Unit: <br>
+                                    <input type="radio" id="singer" name="subunit" value="Singer">
+                                    <label for="singer">Singer</label>
+                                    <input type="radio" id="instrumentalist" name="subunit" value="Instrumentalist">
+                                    <label for="instrumentalist">Instrumentalist</label>
+                                </p>
+                            </div>
+                            <div class="input-fields special" >
+                                <p>Select your part: <br>
+                                    Singer: <br>
+                                    <input type="radio" id="soprano" name="part" value="Soprano">
+                                    <label for="singer">Soprano</label>
+                                    <input type="radio" id="alto" name="part" value="Alto">
+                                    <label for="instrumentalist">Alto</label>
+                                    <input type="radio" id="tenor" name="part" value="Tenor">
+                                    <label for="tenor">Tenor</label><br>
+                                    <!-- <select name="part" >
+                                        <option value=""></option>
+                                        <option id="soprano" name="part" value="Soprano">Soprano</option>
+                                        <option id="alto" name="part" value="Alto">Alto</option>
+                                        <option id="tenor" name="part" value="Tenor">Tenor</option>
+                                    </select> -->
+                                    Instrumentalist: <br>
+                                    <input type="radio" id="guitar" name="part" value="Guitar">
+                                    <label for="singer">Guitar</label>
+                                    <input type="radio" id="bassguitar" name="part" value="Bass Guitar">
+                                    <label for="instrumentalist">Bass Guitar</label>
+                                    <input type="radio" id="keyboard" name="part" value="Keyboard">
+                                    <label for="tenor">Keyboard</label><br>
+                                    <input type="radio" id="drum" name="part" value="Drum">
+                                    <label for="tenor">Drum</label>
+                                    <input type="radio" id="brass" name="part" value="Brass">
+                                    <label for="tenor">Brass</label>
+                                    <input type="radio" id="others" name="part" value="Others">
+                                    <label for="others">Others</label>
+                                    <!-- <p>Others: <input type="text" name="part" id="others" placeholder="Others"></p> -->
+                                </p>
+                            </div>
+                            
+                        </div>
+                        <div class="buttons">
+                            <button class="prevBtn" type="button"
+                            onclick="document.getElementById('first').style.display = 'block'
+                                     document.getElementById('second').style.display = 'none'">
+                                <span class="btnText">Previous</span>
+                                <i class="bi bi-arrow-return-left"></i>                       
+                             </button>
+        
+                            <button class="nextBtn" type="submit">
+                                <span class="btnText">Submit</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        <% } %>
+    </div>
+</body>
+</html>

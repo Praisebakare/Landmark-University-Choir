@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABERNACLE OF PSALMS</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+	<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <style>
+		@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+		*{
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Poppins';
+		}
+		main{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			/* margin: auto; */
+		}
+		header a{
+			padding: 24px;
+			padding-top: 2px;
+		}
+		h1,h2{
+			text-align: center;
+			text-decoration: underline;
+			font-size: 2rem;
+			color: #333;
+		}
+		.table1, .table2{
+			margin: 2px;
+			padding: 24px;	
+		}
+		.table{
+			width: 100%;
+			border-collapse: collapse;
+		}
+		.table th, .table td{
+			padding: 12px 5px;
+			border: 1px solid #ddd;
+			text-align: center;
+			/* font-size: 18px; */
+		}
+		.table td{
+			font-size: 12px;
+		}
+		.table th{
+			background-color: #333;
+			color: #ffffff;
+			font-size: 14px;
+			font-weight: 200;
+		}
+		.table tbody tr:nth-child(even){
+			background-color: #f5f5f5;
+		}
+
+		@media (max-width: 830px) {
+		.table thead{
+			display: none;
+		}
+		.table, .table tbody, .table tr, .table td{
+			display: block;
+			width: 100%;
+		}
+		.table tr{
+			margin-bottom: 15px;
+		}
+		.table td{
+			text-align: left;
+			position: relative;
+		}
+		.table td::before{
+			content: attr(data-label);
+			width: 100%;
+			text-align: left;
+			font-weight: bold;
+		}
+		.input-box input{
+			width: 60%;
+			margin: auto;
+		}
+		.input-box{
+			width: 150px;
+		}
+		}
+		@media (max-width: 500px) {
+		.table td{
+			font-size: 11px;
+		}
+		.member-msg span{
+			font-size: 12px;
+		}
+		}
+		.member{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		.input-box{
+			margin: 9px;
+		}
+		.input-box input{
+			height: 40px;
+			width: 120%;
+			outline: none;
+			padding: 0 15px;
+			border: none;
+			border: 1px solid #aaa;
+			border-radius: 5px;
+			color: #333;
+			font-size: 14px;
+			font-weight: 400;
+		}
+		.button{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0 20px;
+			
+		}
+		.button button{
+			height: 40px;
+			width: 90px;
+			margin: 0 4px;
+			outline: none;
+			border: 2px #aaa solid;
+			border-radius: 10px;
+			background-color: transparent;
+			font-weight: 700;
+			transition: all 0.4s ease;
+			font-size: 12px;
+			cursor: pointer;
+		}
+		.button button:hover{
+			background-color: rgb(186, 184, 184);
+			border: none;
+			color: #fff;
+		}
+		.member-msg span{
+			text-align: center;
+			margin: auto;
+			font-size: 14px;
+		}
+	</style>
+	<script type="text/javascript">
+		function printSection(el){
+			var getFullContent = document.body.innerHTML;
+			var printsection = document.getElementById(el).innerHTML;
+			document.body.innerHTML = printsection;
+			window.print();
+			document.body.innerHTML = getFullContent;
+		}
+	</script>
+</head>
+<body>
+    <header>
+        <a href="/Admin">Home</a>
+    </header>
+	<main>
+
+		<h1>Add Member</h1>
+	<div class="member-msg">
+		<span>
+			<% if (locals.message) { %>
+				<%= message %> 
+			<% } %>
+			</span>
+	</div>
+	<form action="/Admin/Executive/Add" method="post">
+		<div class="member">
+			<div class="input-box">
+				<input type="text" placeholder="Matric No/ Reg No"
+			name="matricno">
+			</div>
+			<div class="input-box">
+				<input type="text" placeholder="Head House of David"
+				name="post">
+			</div>
+			<div class="button">
+				<button type="submit">Add</button>
+			</div>
+		</div>
+	</form>
+
+		<h1>All Executives</h1>
+	<div class="table1">
+		<table id="table" class="table">
+			<tr>
+				<thead>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>MATRIC NO/REG NO</th>
+					<th>School Mail</th>
+					<th>Post</th>
+					<th>Level</th>
+				</thead>
+			</tr>
+				<% excos.forEach(element=> { %>
+				<tbody>
+					<tr>
+						<td data-label="Firstname: ">
+							<%= element.firstname %>
+						</td>
+						<td data-label="Lastname: ">
+							<%= element.lastname %>
+						</td>
+						<td data-label="MatricNo: ">
+							<%= element.matricno %>
+						</td>
+						<td data-label="Webmail: ">
+							<%= element.email %>
+						</td>
+						<td data-label="Post: ">
+							<%= element.post %>
+						</td>
+						<td data-label="Level: ">
+							<%= element.level %>
+						</td>
+					</tr>
+				</tbody>
+				<% }) %>
+		</table>
+	</div>
+	<div class="button">
+		<button onclick="printSection('table')">Print</button>
+	</div>
+	</main>
+</body>
+</html>

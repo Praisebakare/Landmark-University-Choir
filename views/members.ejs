@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabarnacle of Psalms</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+    <link rel="stylesheet" href="/static/members.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+</head>
+<body>
+    <input type="checkbox" id="nav-toggle">
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <label class="menu" for="nav-toggle">
+                <i class="bi bi-list" id="btn"></i>
+            </label>
+            <a href="/Member">
+                <span class="logo-content">LMU.CHOIR</span>
+            </a>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/Member" class="active1">
+                        <i class="bi bi-columns-gap"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Choir/leaders">
+                        <i class="bi bi-briefcase"></i>
+                        <span>Team Leaders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Choir/Announcement">
+                        <i class="bi bi-megaphone"></i>
+                        <span>Announcements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/Attendance">
+                        <i class="bi bi-fingerprint"></i>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/changepassword">
+                        <i class="bi bi-person-lock"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/Updateinfo">
+                        <i class="bi bi-three-dots"></i>
+                        <span>Update Information</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/au/logout">
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <h1>Dashboard</h1>
+            
+            <!-- <div class="search-wrapper">
+                <i class="bi bi-search"></i>
+                <input type="search" placeholder="Search anything">
+            </div> -->
+            <div class="user-wrapper">
+                <div class="img">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div>
+                    <h5><%= user %> </h5>
+                    <small><%= userpart %></small><br>
+                    <small><%= level %> Level</small>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="cards">
+                <div class="card-single">
+                   <a href="/Choir/leaders">
+                        <div>
+                            <h3>Team Leaders</h3>
+                        </div>
+                        <div>
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                   </a>
+                </div>
+                <div class="card-single">
+                    <a href="/Choir/Announcement">
+                        <div>
+                            <h3>Announcement</h3>
+                        </div>
+                        <div>
+                            <i class="bi bi-megaphone"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="card-single ">
+                    <a href="/Member/Attendance">
+                        <div>
+                            <h3>Attendance</h3>
+                        </div>
+                        <div>
+                            <i class="bi bi-fingerprint"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="recent-grid">
+                <div class="attendance">
+                    <div class="inside-card">
+                        <div class="inside-header">
+                            <h4>Your Attendance</h4>
+                            <button><a href="/Member/Attendance">See all</a><i class="bi bi-arrow-right"></i></button>
+                        </div>
+                        <div class="inside-body">
+                            <div class="table-responsive">
+                                <table width="100%">
+                                    <thead>
+                                        <tr>
+                                            <td>Week</td>
+                                            <td>Held</td>
+                                            <td>Status</td>
+                                            <td>Clocked</td>
+                                        </tr>
+                                    </thead>
+                                    <% att.forEach(element => { %>
+                                        <tbody>
+                                            <tr>
+                                                <td><%= element.week %> </td>
+                                                <td><%= element.date %></td>
+                                                <% if (element.clocked == element.date) { %>
+                                                    <td>Present</td>
+                                                    <td><%= element.clocked %>,  <%= element.time %> </td>
+                                                <% } else { %>
+                                                    <td>Absent</td>
+                                                    <td>Not Found</td>
+                                                <% } %>
+                                            </tr>
+                                        </tbody>
+                                    <% }) %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="drive">
+                    <div class="inside-card">
+                        <div class="mission">
+                            <h4>Mission</h4>
+                            <p>
+                                To usher God's people into God's presence and makes an impact in the lives of everyone that hears our music.
+                                To yield ourselves to the Holy Spirit and the word of God for our ministry to be effective and impactful setting the atmosphere for miracles
+                            </p>
+                        </div>
+                        <div class="vision">
+                            <h4>Vision</h4>
+                            <p>
+                                To bring the manifest presence of god down Ps 63:1-2, 1Chr 5:13-14
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

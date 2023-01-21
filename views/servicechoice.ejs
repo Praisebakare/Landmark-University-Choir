@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABERNACLE OF PSALMS</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+    <script type="text/javascript">    
+        function confirm_action(el) {
+            var url = $("#confirm_remove_original").attr('href');
+            if (confirm("Are you sure about your choice?")) {
+                //window.location = url;
+                return true;
+            } else {
+                return false;
+            }
+        }    
+    </script>
+    <style>
+        #service {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/Member">Home</a>
+    </header>
+        <form action="/Member/Service/choice" method="post" accept-charset="utf-8">
+            <div class="span8">
+                <div id="div_row" class="row no_top_margin">
+                    <input type="hidden" value="2000846" name="regnum">
+                </div>
+                <h2>
+                    <% if (locals.message) { %>
+                        <%= message %> 
+                    <% } else { %>
+                </h2>
+                    <label>Choice of Service</label>
+                    <div class="input-control select" data-role="input-control">
+                        <select name="pudate" class="">
+                            <option value="Enroute"></option>
+                            <option value="1st Service">
+                                <% if (locals.message) { %>
+                                    <%= message %> 
+                                <% } %>
+                                <% if (locals.firstoption) { %>
+                                    1st Service(<%= firstoption %>)
+                                <% } %>
+                            </option>
+                            <option value="2nd Service">
+                                <% if (locals.message) { %>
+                                    <%= message %> 
+                                <% } %>
+                                <% if (locals.secondoption) { %>
+                                    2nd Service(<%= secondoption %>)
+                                <% } %>
+                            </option>
+                            <input type="hidden"/>            
+                                <div class="input-control checkbox">
+                                    <label>
+                                        <input type="checkbox" name="i_agree" value="1" id="confirm_remove_original" onclick="confirm_action();">
+                                        <span class="check"></span>
+                                        <span class="text-warning">
+                                            <small>
+                                                By clicking on this, You are agreeing that you are comfortable with the selected Service
+                                            </small>
+                                        </span>
+                                    </label>
+                                </div>
+                        </select>
+                        <button type="submit">Reserve Seat</button>
+                    </div>
+                <% } %>
+            </div>
+        </form>
+        <table>
+            <tr>
+                <th>MATRIC NO/REG NO</th>
+                <th>Date</th>
+                <th>Service Choice</th>
+            </tr>
+                <% tab.forEach(element=> { %>
+                <tr>
+                    <td>
+                        <%= element.matricno %>
+                    </td>
+                    <td>
+                        <%= element.date %>
+                    </td>
+                    <td>
+                        <%= element.serviceChoice %>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+    </div>
+</body>
+</html>
