@@ -16,7 +16,8 @@ const session = require('express-session')
 const bcrypt = require("bcrypt")
 const  { MailtrapClient } = require("mailtrap")
 const nodemailer = require("nodemailer")
-
+/* const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY); */
 
 const cloudinary = require("cloudinary").v2;
 
@@ -30,14 +31,14 @@ cloudinary.config({
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      type: 'OAuth2',
-      user: process.env.MAIL_USERNAME,
-      pass: process.env.MAIL_PASSWORD,
-      clientId: process.env.OAUTH_CLIENTID,
-      clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      refreshToken: process.env.OAUTH_REFRESH_TOKEN
+        type: 'OAuth2',
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN
     }
-  });
+});
 
 const port = process.env.port || 5000
 const JWT_SECRET_KEY = '#%@^&*#i#jhftrsresxcvghcgfcbnBHS5Q7893$%yv%Yg^*(bJhj)'
@@ -216,8 +217,8 @@ app.post('/au/login', (req, res) => {
    try {
         const {username, password} = req.body
 
-        const user = "erom"
-        const key = "Code"
+        const user = process.env.Admin
+        const key = process.env.password
 
         if( user == username && key == password ){
             jwt.sign(
@@ -359,105 +360,131 @@ app.post('/Member/Add', async (req, res) => {
     
     const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
     const password = await bcrypt.hash(randomstring,10)
-
+    const admin = "bakarepraise04@gmail.com"
     
 
     const user = await memberauth.findOne({})
 
     if(!user) {
         try {
-            await Member.create ({
-                firstname: applicant.firstname,
-                middlename: applicant.middlename,
-                lastname: applicant.lastname,
-                regno: applicant.regno,
-                matricno: applicant.matricno,
-                college: applicant.college,
-                department: applicant.department,
-                instagramID: applicant.instagramID,
-                email: applicant.email,
-                phonenumber: applicant.phonenumber,
-                roomno: applicant.roomno,
-                dob: applicant.dob,
-                subunit: applicant.subunit,
-                part: applicant.part,
-                level: applicant.level
-            })
-            await memberauth.create({
-                username,
-                matricno,
-                password
-            })
-            let mailOptions = {
-                from: process.env.EMAIL_USERNAME,
+            let message = {
+                from: admin,
                 to: applicant.email,
-                subject: "Choir Application Update",
-                html: "You have been accepted to the landmark university choir. This is your username and password to access the choir portal(username, password) Login here to change your password and get updated"
+                subject: "Tabarnacle of Psalms",
+                html: `<div class="message">
+                <div class="username">
+                    username: ${username}
+                </div> 
+                <div class="password">
+                    password: ${randomstring}
+                </div>
+                <div class="note">
+                    This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                </div>
+        </div>`
             };
-        
-            transporter.sendMail(mailOptions, function(err, data) {
+            
+            transporter.sendMail(message,async function(err, data) {
                 if (err) {  
-                    return res.render('applicants', {message: 'Try Again'})
+                    return res.render('generate', {message: 'Try Again'})
                 } else {
-                    return res.render('applicants', {message: 'Added successfully'})
+                    try {
+                        await Member.create ({
+                            firstname: applicant.firstname,
+                            middlename: applicant.middlename,
+                            lastname: applicant.lastname,
+                            regno: applicant.regno,
+                            matricno: applicant.matricno,
+                            college: applicant.college,
+                            department: applicant.department,
+                            instagramID: applicant.instagramID,
+                            email: applicant.email,
+                            phonenumber: applicant.phonenumber,
+                            roomno: applicant.roomno,
+                            dob: applicant.dob,
+                            subunit: applicant.subunit,
+                            part: applicant.part,
+                            level: applicant.level
+                        })
+                        await memberauth.create({
+                            username,
+                            matricno,
+                            password
+                        })
+                        return res.render('generate', {message: 'Done...'})
+                    } catch (error) {
+                        if(error.code === 11000) {
+                            return res.render('generate', {message: 'Account Exists'})
+                        } else {
+                            return res.render('generate', {message: 'Contact the Administrator'})
+                        }
+                    }
                 }
             });
         } catch (error) {
-            if(error.code === 11000) {
-                res.render('applicants', {message: "Member exists"})
-            } else {
-                res.render('applicants', {message: "Try Again Later"})
-                console.log(error)
-            }
+            res.render('applicants', {message: "Contact the Administrator"})
         }
     } else {
         
 
         try {
             const username = firstname.toLowerCase() + "." +  lastname.toLowerCase()
-        await Member.create ({
-            firstname: applicant.firstname,
-            middlename: applicant.middlename,
-            lastname: applicant.lastname,
-            regno: applicant.regno,
-            matricno: applicant.matricno,
-            college: applicant.college,
-            department: applicant.department,
-            instagramID: applicant.instagramID,
-            email: applicant.email,
-            phonenumber: applicant.phonenumber,
-            roomno: applicant.roomno,
-            dob: applicant.dob,
-            subunit: applicant.subunit,
-            part: applicant.part,
-            level: applicant.level
-        })
-        await memberauth.create({
-            username,
-            matricno,
-            password
-        })
-            let mailOptions = {
-                from: process.env.EMAIL_USERNAME,
-                to: applicant.email,
-                subject: "Choir Application Update",
-                html: "You have been accepted to the landmark university choir. This is your username and password to access the choir portal(username, password) Login here to change your password and get updated"
-            };
+        let message = {
+            from: admin,
+            to: applicant.email,
+            subject: "Tabarnacle of Psalms",
+            html: `<div class="message">
+            <div class="username">
+                username: ${username}
+            </div> 
+            <div class="password">
+                password: ${randomstring}
+            </div>
+            <div class="note">
+                This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+            </div>
+    </div>`
+        };
         
-            transporter.sendMail(mailOptions, function(err, data) {
-                if (err) {  
-                    return res.render('applicants', {message: 'Try Again'})
-                } else {
-                    return res.render('applicants', {message: 'Added successfully'})
-                }
-            });
-        } catch (error) {
-            if(error.code === 11000) {
-                res.render('applicants', {message: "Member exists"})
+        transporter.sendMail(message,async function(err, data) {
+            if (err) {  
+                return res.render('generate', {message: 'Try Again'})
             } else {
-                res.render('applicants', {message: "Try Again Later"})
-                console.log(error)
+                try {
+                    await Member.create ({
+                        firstname: applicant.firstname,
+                        middlename: applicant.middlename,
+                        lastname: applicant.lastname,
+                        regno: applicant.regno,
+                        matricno: applicant.matricno,
+                        college: applicant.college,
+                        department: applicant.department,
+                        instagramID: applicant.instagramID,
+                        email: applicant.email,
+                        phonenumber: applicant.phonenumber,
+                        roomno: applicant.roomno,
+                        dob: applicant.dob,
+                        subunit: applicant.subunit,
+                        part: applicant.part,
+                        level: applicant.level
+                    })
+                    await memberauth.create({
+                        username,
+                        matricno,
+                        password
+                    })
+                    return res.render('generate', {message: 'Done...'})
+                } catch (error) {
+                    if(error.code === 11000) {
+                        return res.render('generate', {message: 'Account Exists'})
+                    } else {
+                        return res.render('generate', {message: 'Contact the Administrator'})
+                    }
+                }
             }
+        });
+        } catch (error) {
+            res.render('applicants', {message: "Contact the Administrator"})
         }
     }
 })
@@ -1425,6 +1452,7 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                 {matricno: matricno }, 
                 {regno: matricno}
             ]})
+            const admin = "bakarepraise04@gmail.com"
 
             var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
             var stringLength = 7
@@ -1444,241 +1472,95 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                 const user = await memberauth.findOne({username: username})
 
                 if (!user) {
-                    await memberauth.create({
-                        username,
-                        matricno,
-                        password
-                    })
-    
-                    let mailOptions = {
-                        from: process.env.EMAIL_USERNAME,
+                    let message = {
+                        from: admin,
                         to: member.email,
                         subject: "Tabarnacle of Psalms",
-                        html: "This is your username and password to access the choir portal(username, password) Login here to change your password, view your attendance, announcements, team leaders, and provide suggestions"
+                        html: `<div class="message">
+                        <div class="username">
+                            username: ${username}
+                        </div> 
+                        <div class="password">
+                            password: ${randomstring}
+                        </div>
+                        <div class="note">
+                            This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                        </div>
+                </div>`
                     };
-                    
-                    transporter.sendMail(mailOptions, function(err, data) {
+
+                    transporter.sendMail(message,async function(err, data) {
                         if (err) {  
+                            console.log(err)
                             return res.render('generate', {message: 'Try Again'})
                         } else {
-                            return res.render('generate', {message: 'Done...'})
+                            try {
+                                await memberauth.create({
+                                    username,
+                                    matricno,
+                                    password
+                                })
+                                return res.render('generate', {message: 'Done...'})
+                            } catch (error) {
+                                if(error.code === 11000) {
+                                    res.render('generate', {message: 'Account generated already'})
+                                } else {
+                                    res.render('generate', {message: "Contact the Administrator"})
+                                }
+                            }
                         }
                     });
                 } else {
                     const username = firstname.toLowerCase() + "." +  lastname.toLowerCase() 
-                    await memberauth.create({
-                        username,
-                        matricno,
-                        password
-                    })
-    
-                    let mailOptions = {
-                        from: process.env.EMAIL_USERNAME,
+                    let message = {
+                        from: admin,
                         to: member.email,
                         subject: "Tabarnacle of Psalms",
-                        html: "This is your username and password to access the choir portal(username, password) Login here to change your password, view your attendance, announcements, team leaders, and provide suggestions"
+                        html: `<div class="message">
+                        <div class="username">
+                            username: ${username}
+                        </div> 
+                        <div class="password">
+                            password: ${randomstring}
+                        </div>
+                        <div class="note">
+                            This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                        </div>
+                </div>`
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
+                    
+                    transporter.sendMail(message,async function(err, data) {
                         if (err) {  
+                            console.log(err)
                             return res.render('generate', {message: 'Try Again'})
                         } else {
-                            return res.render('generate', {message: 'Done...'})
-                        }
-                    });    
-                }
-            } catch (error) {
-                if(error.code === 11000) {
-                    res.render('generate', {message: 'Account generated already'})
-                } else {
-                    res.render('generate', {message: "Contact the Administrator"})
-                    console.log(error)
-                }
-            }
-        } catch (error) {
-            res.render('generate', {message: "Contact the Adminstrator"})
-            console.log(error)
-        }
-    }else {
-        res.redirect('/au/login')
-    }
-})
-
-app.post('/Admin/Member/All', async(req, res) => {
-    let sess = req.session
-    if (sess.user) {
-        try {
-            const member = await Member.find({})
-
-            var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
-            var stringLength = 7
-            var randomstring = "";
-
-            for (var i=0; i<stringLength; i++) {  
-                var rnum = Math.floor(Math.random() * string.length);  
-                randomstring += string.substring(rnum, rnum+1);
-            }
-
-            try {
-                member.forEach(async element => {
-                    const matricno =  element.matricno
-                    const lastname = element.lastname
-                    const firstname = element.firstname
-                    const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
-                    const password = await bcrypt.hash(randomstring,10)
-
-                    const user = await memberauth.findOne({username: username})
-
-                    if (!user) {
-                        try {
-                            await memberauth.create({
-                                username,
-                                matricno,
-                                password
-                            })
-                        } catch (error) {
-                            if(error.code === 11000) {
-                                res.render('generate', {message: "Done"})
-                                console.log(error)
-                            } else {
-                                res.render('generate', {message: "Contact the Administrator"})
-                                console.log(error)
-                            }   
-                        }
-                        let mailOptions = {
-                            from: process.env.EMAIL_USERNAME,
-                            to: element.email,
-                            subject: "Tabarnacle of Psalms",
-                            html: "This is your username and password to access the choir portal(username, password) Login here to change your password, view your attendance, announcements, team leaders, and provide suggestions"
-                        };
-                    
-                        transporter.sendMail(mailOptions, function(err, data) {
-                            if (err) {  
-                                return res.render('generate', {message: 'Try Again'})
-                            } else {
+                            try {
+                                await memberauth.create({
+                                    username,
+                                    matricno,
+                                    password
+                                })
                                 return res.render('generate', {message: 'Done...'})
+                            } catch (error) {
+                                if(error.code === 11000) {
+                                    res.render('generate', {message: 'Account generated already'})
+                                } else {
+                                    res.render('generate', {message: "Contact the Administrator"})
+                                }
                             }
-                        });
-                    } else {
-                        const username = firstname.toLowerCase() + "." +  lastname.toLowerCase() 
-                        try {
-                            await memberauth.create({
-                                username,
-                                matricno,
-                                password
-                            })
-                        } catch (error) {
-                            if(error.code === 11000) {
-                                res.render('generate', {message: "Done"})
-                                console.log(error)
-                            } else {
-                                res.render('generate', {message: "Contact the Administrator"})
-                                console.log(error)
-                            }   
                         }
-                        
-    
-                        let mailOptions = {
-                            from: process.env.EMAIL_USERNAME,
-                            to: element.email,
-                            subject: "Tabarnacle of Psalms",
-                            html: "This is your username and password to access the choir portal(username, password) Login here to change your password, view your attendance, announcements, team leaders, and provide suggestions"
-                        };
-                    
-                        transporter.sendMail(mailOptions, function(err, data) {
-                            if (err) {  
-                                return res.render('generate', {message: 'Try Again'})
-                            } else {
-                                return res.render('generate', {message: 'Done...'})
-                            }
-                        });
-                    }
-                })
+                    });
+                }
             } catch (error) {
                 res.render('generate', {message: "Contact the Administrator"})
-                console.log(error)
             }
         } catch (error) {
             res.render('generate', {message: "Contact the Adminstrator"})
-            console.log(error)
         }
     }else {
         res.redirect('/au/login')
     }
 })
-
-
-/* //Service Selection
-var x = 100
-var y = 70
-app.post('/Member/Service/choice', async(req, res) => {
-    let sess = req.session
-    if(sess.user) {
-        const serviceChoice = req.body.pudate
-        const timeoutScheduled = 5
-        const dated = new Date()
-
-        const dd = dated.getDay()
-        const mm = dated.getMonth()
-        const yyyy = dated.getFullYear()
-
-        const date = dd + "-" + mm + "-" + yyyy
-        
-        const member = await memberauth.findOne({username: sess.user})
-        const matricno = member.matricno
-
-        if(date.getDay() == timeoutScheduled) {
-            await Choice.create({
-                matricno,
-                date,
-                serviceChoice
-            })
-
-            if(serviceChoice == '1st Service') {
-                var amount1 = x--
-            } else {  
-                var amount2 = y--
-            }
-
-            const table = await Choice.find({matricno: matricno}).lean()
-            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, message: 'You have selected For the week', tab: table})
-        }
-    } else {
-        res.redirect('/Member/au/Login')
-    }
-})
-
-app.get('/Member/Service/choice', async(req, res) => {
-    let sess = req.session
-    if(sess.user) {
-        const timeoutScheduled = 5
-        const date = new Date()
-        const member = await memberauth.findOne({username: sess.user})
-        const matricno = member.matricno
-
-        const table = await Choice.find({matricno: matricno}).lean()
-
-        if(date.getDay() !== timeoutScheduled) {
-            res.render('servicechoice', {message: 'Selection Closed For the Week', tab: table})
-        } else {
-            table.forEach(element => {
-                const dateDone = element.date
-                const dateTest = new Date()
-                console.log(dateDone)
-                console.log(dateTest)
-                if (date == dateDone) {
-                    res.render('servicechoice', {message: 'You have selected your service', tab: table})
-                }
-            });
-            
-            var amount1 = x
-            var amount2 = y
-            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, tab: table})
-        }
-    } else {
-        res.redirect('/Member/au/Login')
-    }
-}) */
 
 app.post('/Member/au/Login', async(req, res) => {
    try {
