@@ -217,8 +217,8 @@ app.post('/au/login', (req, res) => {
    try {
         const {username, password} = req.body
 
-        const user = "erom"
-        const key = "Code"
+        const user = process.env.Admin
+        const key = process.env.password
 
         if( user == username && key == password ){
             jwt.sign(
@@ -1561,6 +1561,183 @@ app.post('/Admin/Member/Generate', async(req, res) => {
         res.redirect('/au/login')
     }
 })
+
+/* app.post('/Admin/Member/All', async(req, res) => {
+    let sess = req.session
+    if (sess.user) {
+        try {
+            const member = await Member.find({})
+
+            var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
+            var stringLength = 7
+            var randomstring = "";
+
+            for (var i=0; i<stringLength; i++) {  
+                var rnum = Math.floor(Math.random() * string.length);  
+                randomstring += string.substring(rnum, rnum+1);
+            }
+
+            try {
+                member.forEach(async element => {
+                    const matricno =  element.matricno
+                    const lastname = element.lastname
+                    const firstname = element.firstname
+                    const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
+                    const password = await bcrypt.hash(randomstring,10)
+
+                    const user = await memberauth.findOne({username: username})
+                    if (!user) {
+                        let message = {
+                            from: process.env.EMAIL_USERNAME,
+                            to: element.email,
+                            subject: "Tabarnacle of Psalms",
+                            html: `<div class="message">
+                            <div class="username">
+                                username: ${username}
+                            </div> 
+                            <div class="password">
+                                password: ${randomstring}
+                            </div>
+                            <div class="note">
+                                This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                            </div>
+                    </div>`
+                        };
+                        transporter.sendMail(message,async function(err, data) {
+                            if (err) {  
+                                console.log(error)
+                                return res.render('generate', {message: 'Try Again'})
+                            } else {
+                                await memberauth.create({
+                                    username,
+                                    matricno,
+                                    password
+                                })
+                                return res.render('generate', {message: 'Done...'})
+                            }
+                        });
+                    } else {
+                        const username = firstname.toLowerCase() + "." +  lastname.toLowerCase() 
+                        let message = {
+                            from: process.env.EMAIL_USERNAME,
+                            to: element.email,
+                            subject: "Tabarnacle of Psalms",
+                            html: `<div class="message">
+                            <div class="username">
+                                username: ${username}
+                            </div> 
+                            <div class="password">
+                                password: ${randomstring}
+                            </div>
+                            <div class="note">
+                                This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                            </div>
+                    </div>`
+                        };
+                        
+                        transporter.sendMail(message,async function(err, data) {
+                            if (err) {  
+                                return res.render('generate', {message: 'Try Again'})
+                            } else {
+                                await memberauth.create({
+                                    username,
+                                    matricno,
+                                    password
+                                })
+                                return res.render('generate', {message: 'Done...'})
+                            }
+                        });
+                    }
+                })  
+            } catch (error) {
+                if(error.code === 11000) {
+                    res.render('generate', {message: 'Account generated already'})
+                } else {
+                    res.render('generate', {message: "Contact the Administrator"})
+                    console.log(error)
+                }
+            }      
+        } catch (error) {
+            res.render('generate', {message: "Contact the Adminstrator"})
+            console.log(error)
+        }
+    }else {
+        res.redirect('/au/login')
+    }
+}) */
+
+
+/* //Service Selection
+var x = 100
+var y = 70
+app.post('/Member/Service/choice', async(req, res) => {
+    let sess = req.session
+    if(sess.user) {
+        const serviceChoice = req.body.pudate
+        const timeoutScheduled = 5
+        const dated = new Date()
+
+        const dd = dated.getDay()
+        const mm = dated.getMonth()
+        const yyyy = dated.getFullYear()
+
+        const date = dd + "-" + mm + "-" + yyyy
+        
+        const member = await memberauth.findOne({username: sess.user})
+        const matricno = member.matricno
+
+        if(date.getDay() == timeoutScheduled) {
+            await Choice.create({
+                matricno,
+                date,
+                serviceChoice
+            })
+
+            if(serviceChoice == '1st Service') {
+                var amount1 = x--
+            } else {  
+                var amount2 = y--
+            }
+
+            const table = await Choice.find({matricno: matricno}).lean()
+            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, message: 'You have selected For the week', tab: table})
+        }
+    } else {
+        res.redirect('/Member/au/Login')
+    }
+})
+
+app.get('/Member/Service/choice', async(req, res) => {
+    let sess = req.session
+    if(sess.user) {
+        const timeoutScheduled = 5
+        const date = new Date()
+        const member = await memberauth.findOne({username: sess.user})
+        const matricno = member.matricno
+
+        const table = await Choice.find({matricno: matricno}).lean()
+
+        if(date.getDay() !== timeoutScheduled) {
+            res.render('servicechoice', {message: 'Selection Closed For the Week', tab: table})
+        } else {
+            table.forEach(element => {
+                const dateDone = element.date
+                const dateTest = new Date()
+                console.log(dateDone)
+                console.log(dateTest)
+                if (date == dateDone) {
+                    res.render('servicechoice', {message: 'You have selected your service', tab: table})
+                }
+            });
+            
+            var amount1 = x
+            var amount2 = y
+            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, tab: table})
+        }
+    } else {
+        res.redirect('/Member/au/Login')
+    }
+}) */
 
 app.post('/Member/au/Login', async(req, res) => {
    try {
