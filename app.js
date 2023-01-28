@@ -216,8 +216,8 @@ app.post('/au/login', (req, res) => {
    try {
         const {username, password} = req.body
 
-        const user = "erom"
-        const key = "Code"
+        const user = process.env.Admin
+        const key = process.env.Password
 
         if( user == username && key == password ){
             jwt.sign(
