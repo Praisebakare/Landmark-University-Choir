@@ -14,7 +14,9 @@ const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const session = require('express-session')
 const bcrypt = require("bcrypt")
-const  { MailtrapClient } = require("mailtrap")
+const {
+    MailtrapClient
+} = require("mailtrap")
 const nodemailer = require("nodemailer")
 /* const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY); */
@@ -22,10 +24,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY); */
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: process.env.cloud_name,
-  api_key: process.env.api_key,
-  api_secret: process.env.api_secret,
-  secure: true
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
+    secure: true
 });
 
 let transporter = nodemailer.createTransport({
@@ -43,21 +45,19 @@ let transporter = nodemailer.createTransport({
 const port = process.env.port || 5000
 const JWT_SECRET_KEY = '#%@^&*#i#jhftrsresxcvghcgfcbnBHS5Q7893$%yv%Yg^*(bJhj)'
 
-mongoose.connect(process.env.MONGO_URL,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    } 
-  );
-  
-  const db = mongoose.connection;
-  db.on("error", console.error.bind(console, "connection error: "));
-  db.once("open", function () {
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
     console.log("Connected successfully")
     app.listen(port, () => {
         console.log(`server up at port ${port}`)
     })
-}); 
+});
 
 const app = express()
 
@@ -74,184 +74,235 @@ app.use(session({
 app.set('view engine', 'ejs');
 
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.urlencoded({
+    extended: true
+}))
 
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 var sess;
 
 //ADMIN PAGE
-app.get('/Admin', async(req, res) => {
+app.get('/Admin', async (req, res) => {
     sess = req.session;
-    if(sess.user) {
-        res.render('admin', {title: "Admin"})
+    if (sess.user) {
+        res.render('admin', {
+            title: "Admin"
+        })
     } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/100', async(req, res) => {
+app.get('/Admin/100', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const level = "100"
-        const topp = await Member.find({subunit: "Singer" , level }).lean()
-        const hodd = await Member.find({subunit: "Instrumentalist" , level }).lean()
+        const topp = await Member.find({
+            subunit: "Singer",
+            level
+        }).lean()
+        const hodd = await Member.find({
+            subunit: "Instrumentalist",
+            level
+        }).lean()
 
         res.render("admin1", {
             top: topp,
             hod: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/200', async(req, res) => {
+app.get('/Admin/200', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const level = "200"
-        const topp = await Member.find({subunit: "Singer" , level }).lean()
-        const hodd = await Member.find({subunit: "Instrumentalist" , level }).lean()
+        const topp = await Member.find({
+            subunit: "Singer",
+            level
+        }).lean()
+        const hodd = await Member.find({
+            subunit: "Instrumentalist",
+            level
+        }).lean()
 
         res.render("admin1", {
             top: topp,
             hod: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/300', async(req, res) => {
+app.get('/Admin/300', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const level = "300"
-        const topp = await Member.find({subunit: "Singer" , level }).lean()
-        const hodd = await Member.find({subunit: "Instrumentalist" , level }).lean()
+        const topp = await Member.find({
+            subunit: "Singer",
+            level
+        }).lean()
+        const hodd = await Member.find({
+            subunit: "Instrumentalist",
+            level
+        }).lean()
 
         res.render("admin1", {
             top: topp,
             hod: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/400', async(req, res) => {
+app.get('/Admin/400', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const level = "400"
-        const topp = await Member.find({subunit: "Singer" , level }).lean()
-        const hodd = await Member.find({subunit: "Instrumentalist" , level }).lean()
+        const topp = await Member.find({
+            subunit: "Singer",
+            level
+        }).lean()
+        const hodd = await Member.find({
+            subunit: "Instrumentalist",
+            level
+        }).lean()
 
         res.render("admin1", {
             top: topp,
             hod: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/500', async(req, res) => {
+app.get('/Admin/500', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const level = "500"
-        const topp = await Member.find({subunit: "Singer" , level }).lean()
-        const hodd = await Member.find({subunit: "Instrumentalist" , level }).lean()
+        const topp = await Member.find({
+            subunit: "Singer",
+            level
+        }).lean()
+        const hodd = await Member.find({
+            subunit: "Instrumentalist",
+            level
+        }).lean()
 
         res.render("admin1", {
             top: topp,
             hod: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/Choir', async(req, res) => {
+app.get('/Admin/Choir', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
-        const topp = await Member.find({subunit: "Singer"}).lean()
+    if (sess.user) {
+        const topp = await Member.find({
+            subunit: "Singer"
+        }).lean()
 
         res.render("admin2", {
             top: topp,
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/Applicants', async(req, res) => {
+app.get('/Admin/Applicants', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const topp = await Applicants.find({}).lean()
 
         res.render("admin2", {
             top: topp,
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/HOD', async(req, res) => {
+app.get('/Admin/HOD', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
-        const hodd = await Member.find({subunit: "Instrumentalist"}).lean()
+    if (sess.user) {
+        const hodd = await Member.find({
+            subunit: "Instrumentalist"
+        }).lean()
 
         res.render("admin2", {
             top: hodd
         })
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
 app.get('/au/login', (req, res) => {
-    res.render('logadmin', {title: "Login"})
+    res.render('logadmin', {
+        title: "Login"
+    })
 })
 
 app.post('/au/login', (req, res) => {
-   try {
-        const {username, password} = req.body
+    try {
+        const {
+            username,
+            password
+        } = req.body
 
         const user = process.env.Admin
         const key = process.env.password
 
-        if( user == username && key == password ){
-            jwt.sign(
-                {
+        if (user == username && key == password) {
+            jwt.sign({
                     user: username,
                 },
                 JWT_SECRET_KEY
-            )/* 
-            localstorage.setItem('admin', user); */
+            )
+            /* 
+                        localstorage.setItem('admin', user); */
             sess = req.session
             sess.user = req.body.username
             res.redirect('/Admin')
         } else {
-            return res.render('logadmin' , {message: "Invalid Username or Password"})
+            return res.render('logadmin', {
+                message: "Invalid Username or Password"
+            })
         }
-   } catch (error) {
+    } catch (error) {
         console.log(error)
-   }
+    }
 })
 
 
 app.get('/', (req, res) => {
-    res.render('home', {title: "HOME"})
+    res.render('home', {
+        title: "HOME"
+    })
 })
 
 app.get('/welcome', (req, res) => {
-    res.render('welcome', {title: "Welcome"})
+    res.render('welcome', {
+        title: "Welcome"
+    })
 })
 
 
 //REGISTRATION ROUTE
 app.get('/Register', (req, res) => {
-    res.render('register', {title: "Registration"})
+    res.render('register', {
+        title: "Registration"
+    })
 })
 
 app.post('/Register', async (req, res) => {
@@ -271,9 +322,9 @@ app.post('/Register', async (req, res) => {
         level
     } = req.body
 
-    if(req.body.level != "100") {
+    if (req.body.level != "100") {
         try {
-            await Member.create ({
+            await Member.create({
                 firstname,
                 middlename,
                 lastname,
@@ -292,16 +343,20 @@ app.post('/Register', async (req, res) => {
             })
             res.redirect('/welcome')
         } catch (error) {
-            if(error.code === 11000){
-                return res.render('register', {message: "Thank you"})
+            if (error.code === 11000) {
+                return res.render('register', {
+                    message: "Thank you"
+                })
             } else {
-                res.render('register', {message: "Try Again Later"})
+                res.render('register', {
+                    message: "Try Again Later"
+                })
                 console.log(error)
             }
         }
     } else {
         try {
-            await Applicants.create ({
+            await Applicants.create({
                 firstname,
                 middlename,
                 lastname,
@@ -320,52 +375,61 @@ app.post('/Register', async (req, res) => {
             })
             res.redirect('/welcome')
         } catch (error) {
-            if(error.code === 11000){
-                return res.render('register', {message: "Thank you"})
+            if (error.code === 11000) {
+                return res.render('register', {
+                    message: "Thank you"
+                })
             } else {
-                res.render('register', {message: "Try Again Later"})
+                res.render('register', {
+                    message: "Try Again Later"
+                })
                 console.log(error)
             }
         }
-    }  
+    }
 })
 
-app.get('/Member/Add', async(req, res) => {
+app.get('/Member/Add', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         res.render("applicants")
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
 app.post('/Member/Add', async (req, res) => {
-    const matricno =  req.body.matricno
-    const applicant = await Applicants.findOne({$or: [
-        {matricno: matricno},
-        {regno: matricno}
-    ]})
+    const matricno = req.body.matricno
+    const applicant = await Applicants.findOne({
+        $or: [{
+                matricno: matricno
+            },
+            {
+                regno: matricno
+            }
+        ]
+    })
 
     var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
     var stringLength = 7
     var randomstring = "";
 
-    for (var i=0; i<stringLength; i++) {  
-        var rnum = Math.floor(Math.random() * string.length);  
-        randomstring += string.substring(rnum, rnum+1);
+    for (var i = 0; i < stringLength; i++) {
+        var rnum = Math.floor(Math.random() * string.length);
+        randomstring += string.substring(rnum, rnum + 1);
     }
 
     const lastname = applicant.lastname
     const firstname = applicant.firstname
-    
+
     const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
-    const password = await bcrypt.hash(randomstring,10)
+    const password = await bcrypt.hash(randomstring, 10)
     const admin = "bakarepraise04@gmail.com"
-    
+
 
     const user = await memberauth.findOne({})
 
-    if(!user) {
+    if (!user) {
         try {
             let message = {
                 from: admin,
@@ -383,13 +447,15 @@ app.post('/Member/Add', async (req, res) => {
                 </div>
         </div>`
             };
-            
-            transporter.sendMail(message,async function(err, data) {
-                if (err) {  
-                    return res.render('generate', {message: 'Try Again'})
+
+            transporter.sendMail(message, async function (err, data) {
+                if (err) {
+                    return res.render('generate', {
+                        message: 'Try Again'
+                    })
                 } else {
                     try {
-                        await Member.create ({
+                        await Member.create({
                             firstname: applicant.firstname,
                             middlename: applicant.middlename,
                             lastname: applicant.lastname,
@@ -411,29 +477,37 @@ app.post('/Member/Add', async (req, res) => {
                             matricno,
                             password
                         })
-                        return res.render('generate', {message: 'Done...'})
+                        return res.render('generate', {
+                            message: 'Done...'
+                        })
                     } catch (error) {
-                        if(error.code === 11000) {
-                            return res.render('generate', {message: 'Account Exists'})
+                        if (error.code === 11000) {
+                            return res.render('generate', {
+                                message: 'Account Exists'
+                            })
                         } else {
-                            return res.render('generate', {message: 'Contact the Administrator'})
+                            return res.render('generate', {
+                                message: 'Contact the Administrator'
+                            })
                         }
                     }
                 }
             });
         } catch (error) {
-            res.render('applicants', {message: "Contact the Administrator"})
+            res.render('applicants', {
+                message: "Contact the Administrator"
+            })
         }
     } else {
-        
+
 
         try {
-            const username = firstname.toLowerCase() + "." +  lastname.toLowerCase()
-        let message = {
-            from: admin,
-            to: applicant.email,
-            subject: "Tabarnacle of Psalms",
-            html: `<div class="message">
+            const username = firstname.toLowerCase() + "." + lastname.toLowerCase()
+            let message = {
+                from: admin,
+                to: applicant.email,
+                subject: "Tabarnacle of Psalms",
+                html: `<div class="message">
             <div class="username">
                 username: ${username}
             </div> 
@@ -444,80 +518,99 @@ app.post('/Member/Add', async (req, res) => {
                 This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
             </div>
     </div>`
-        };
-        
-        transporter.sendMail(message,async function(err, data) {
-            if (err) {  
-                return res.render('generate', {message: 'Try Again'})
-            } else {
-                try {
-                    await Member.create ({
-                        firstname: applicant.firstname,
-                        middlename: applicant.middlename,
-                        lastname: applicant.lastname,
-                        regno: applicant.regno,
-                        matricno: applicant.matricno,
-                        college: applicant.college,
-                        department: applicant.department,
-                        instagramID: applicant.instagramID,
-                        email: applicant.email,
-                        phonenumber: applicant.phonenumber,
-                        roomno: applicant.roomno,
-                        dob: applicant.dob,
-                        subunit: applicant.subunit,
-                        part: applicant.part,
-                        level: applicant.level
+            };
+
+            transporter.sendMail(message, async function (err, data) {
+                if (err) {
+                    return res.render('generate', {
+                        message: 'Try Again'
                     })
-                    await memberauth.create({
-                        username,
-                        matricno,
-                        password
-                    })
-                    return res.render('generate', {message: 'Done...'})
-                } catch (error) {
-                    if(error.code === 11000) {
-                        return res.render('generate', {message: 'Account Exists'})
-                    } else {
-                        return res.render('generate', {message: 'Contact the Administrator'})
+                } else {
+                    try {
+                        await Member.create({
+                            firstname: applicant.firstname,
+                            middlename: applicant.middlename,
+                            lastname: applicant.lastname,
+                            regno: applicant.regno,
+                            matricno: applicant.matricno,
+                            college: applicant.college,
+                            department: applicant.department,
+                            instagramID: applicant.instagramID,
+                            email: applicant.email,
+                            phonenumber: applicant.phonenumber,
+                            roomno: applicant.roomno,
+                            dob: applicant.dob,
+                            subunit: applicant.subunit,
+                            part: applicant.part,
+                            level: applicant.level
+                        })
+                        await memberauth.create({
+                            username,
+                            matricno,
+                            password
+                        })
+                        return res.render('generate', {
+                            message: 'Done...'
+                        })
+                    } catch (error) {
+                        if (error.code === 11000) {
+                            return res.render('generate', {
+                                message: 'Account Exists'
+                            })
+                        } else {
+                            return res.render('generate', {
+                                message: 'Contact the Administrator'
+                            })
+                        }
                     }
                 }
-            }
-        });
+            });
         } catch (error) {
-            res.render('applicants', {message: "Contact the Administrator"})
+            res.render('applicants', {
+                message: "Contact the Administrator"
+            })
         }
     }
 })
 
-app.get('/au/logout', (req ,res)=>{
+app.get('/au/logout', (req, res) => {
     req.session.destroy((err) => {
-        if(err) {
+        if (err) {
             return console.log(err);
         }
-        res.render('logadmin', { title: "Log out", message : "logout Successfully...!"})
+        res.render('logadmin', {
+            title: "Log out",
+            message: "logout Successfully...!"
+        })
     });
 })
 
 //Attendance Portal
-app.get('/Admin/Att', async(req, res) => {
+app.get('/Admin/Att', async (req, res) => {
     sess = req.session
     sess.user = "attendances"
     const today = new Date();
     const d = today.getDate().toString();
     const mmm = today.getMonth() + 1;
     const m = mmm.toString();
-    
+
     if (m.length == 2 && d.length == 1) {
-        const dd = '0'+ d
-        const mm =  m
+        const dd = '0' + d
+        const mm = m
         const yyyy = today.getFullYear()
         const date = dd + "-" + mm + "-" + yyyy
         const clocked = date
-        const amount = await Att.find({clocked}).count()
-        if(amount == 0) {
-            return res.render('attendance', {message: "0"})
+        const amount = await Att.find({
+            clocked
+        }).count()
+        if (amount == 0) {
+            return res.render('attendance', {
+                message: "0"
+            })
         } else {
-            return res.render('attendance', {message: amount})
+            return res.render('attendance', {
+                message: amount
+            })
         }
     } else if (m.length == 1 && d.length == 2) {
         const dd = d
@@ -525,42 +618,60 @@ app.get('/Admin/Att', async(req, res) => {
         const yyyy = today.getFullYear()
         const date = dd + "-" + mm + "-" + yyyy
         const clocked = date
-        const amount = await Att.find({clocked}).count()
-        if(amount == 0) {
-            return res.render('attendance', {message: "0"})
+        const amount = await Att.find({
+            clocked
+        }).count()
+        if (amount == 0) {
+            return res.render('attendance', {
+                message: "0"
+            })
         } else {
-            return res.render('attendance', {message: amount})
+            return res.render('attendance', {
+                message: amount
+            })
         }
     } else if (m.length == 2 && d.length == 2) {
-        const dd =  d
+        const dd = d
         const mm = m
         const yyyy = today.getFullYear()
         const date = dd + "-" + mm + "-" + yyyy
         const clocked = date
-        const amount = await Att.find({clocked}).count()
-        if(amount == 0) {
-            return res.render('attendance', {message: "0"})
+        const amount = await Att.find({
+            clocked
+        }).count()
+        if (amount == 0) {
+            return res.render('attendance', {
+                message: "0"
+            })
         } else {
-            return res.render('attendance', {message: amount})
+            return res.render('attendance', {
+                message: amount
+            })
         }
     } else {
-        const dd = '0'+ d
+        const dd = '0' + d
         const mm = '0' + m
         const yyyy = today.getFullYear()
         const date = dd + "-" + mm + "-" + yyyy
         const clocked = date
-        const amount = await Att.find({clocked}).count()
-        if(amount == 0) {
-            return res.render('attendance', {message: "0"})
+        const amount = await Att.find({
+            clocked
+        }).count()
+        if (amount == 0) {
+            return res.render('attendance', {
+                message: "0"
+            })
         } else {
-            return res.render('attendance', {message: amount})
+            return res.render('attendance', {
+                message: amount
+            })
         }
     }
 })
 
 app.post('/Admin/Att/Done', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const today = new Date();
         const d = today.getDate().toString();
         const mmm = today.getMonth() + 2;
@@ -568,26 +679,31 @@ app.post('/Admin/Att/Done', async (req, res) => {
         const hours = today.getHours()
         const minutes = today.getMinutes()
         const seconds = today.getSeconds()
-        const time = hours + ":" + minutes + ":" + seconds 
+        const time = hours + ":" + minutes + ":" + seconds
         const week = 1
         const members = await Member.find()
         members.forEach(async element => {
             const matricno = element.matricno
 
-            const member =  await Member.findOne({$or: [
-                {regno: matricno},
-                {matricno: matricno}
-            ]})
+            const member = await Member.findOne({
+                $or: [{
+                        regno: matricno
+                    },
+                    {
+                        matricno: matricno
+                    }
+                ]
+            })
             const firstname = member.firstname
             const lastname = member.lastname
 
             if (m.length == 2 && d.length == 1) {
-                const dd = '0'+ d
-                const mm =  m
+                const dd = '0' + d
+                const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = "0"
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -599,12 +715,18 @@ app.post('/Admin/Att/Done', async (req, res) => {
                         firstname,
                         lastname
                     })
-                    return res.render('attendance', {Status: "Done"})
+                    return res.render('attendance', {
+                        Status: "Done"
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        return res.render('attendance', {Status: "Done"})
+                    if (error.code === 11000) {
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     } else {
-                        return res.render('attendance', {Status: "Done"})
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     }
                 }
             } else if (m.length == 1 && d.length == 2) {
@@ -613,7 +735,7 @@ app.post('/Admin/Att/Done', async (req, res) => {
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = "0"
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -625,21 +747,27 @@ app.post('/Admin/Att/Done', async (req, res) => {
                         firstname,
                         lastname
                     })
-                    return res.render('attendance', {Status: "Done"})
+                    return res.render('attendance', {
+                        Status: "Done"
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        return res.render('attendance', {Status: "Done"})
+                    if (error.code === 11000) {
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     } else {
-                        return res.render('attendance', {Status: "Done"})
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     }
                 }
             } else if (m.length == 2 && d.length == 2) {
-                const dd =  d
+                const dd = d
                 const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = "0"
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -651,21 +779,27 @@ app.post('/Admin/Att/Done', async (req, res) => {
                         firstname,
                         lastname
                     })
-                    return res.render('attendance', {Status: "Done"})
+                    return res.render('attendance', {
+                        Status: "Done"
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        return res.render('attendance', {Status: "Done"})
+                    if (error.code === 11000) {
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     } else {
-                        return res.render('attendance', {Status: "Done"})
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     }
                 }
             } else {
-                const dd = '0'+ d
+                const dd = '0' + d
                 const mm = '0' + m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = "0"
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -677,12 +811,18 @@ app.post('/Admin/Att/Done', async (req, res) => {
                         firstname,
                         lastname
                     })
-                    return res.render('attendance', {Status: "Done"})
+                    return res.render('attendance', {
+                        Status: "Done"
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        return res.render('attendance', {Status: "Done"})
+                    if (error.code === 11000) {
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     } else {
-                        return res.render('attendance', {Status: "Done"})
+                        return res.render('attendance', {
+                            Status: "Done"
+                        })
                     }
                 }
             }
@@ -694,13 +834,18 @@ app.post('/Admin/Att/Done', async (req, res) => {
 
 app.post('/Admin/Att', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         try {
             const matricno = req.body.matricno
-            const member =  await Member.findOne({$or: [
-                {regno: matricno},
-                {matricno: matricno}
-            ]})
+            const member = await Member.findOne({
+                $or: [{
+                        regno: matricno
+                    },
+                    {
+                        matricno: matricno
+                    }
+                ]
+            })
             const firstname = member.firstname
             const lastname = member.lastname
 
@@ -713,19 +858,19 @@ app.post('/Admin/Att', async (req, res) => {
             const hours = today.getHours()
             const minutes = today.getMinutes()
             const seconds = today.getSeconds()
-            const time = hours + ":" + minutes + ":" + seconds 
+            const time = hours + ":" + minutes + ":" + seconds
 
             const week = 1
 
             //m.length is 2 and d.length is 1, m.length is 1 and d.length is 2, m.length is 2 and d.length is 2
-            
+
             if (m.length == 2 && d.length == 1) {
-                const dd = '0'+ d
-                const mm =  m
+                const dd = '0' + d
+                const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -738,15 +883,29 @@ app.post('/Admin/Att', async (req, res) => {
                         lastname
                     })
 
-                    const amount = await Att.find({clocked}).count()
-                    res.render('attendance', {message: amount})
+                    const amount = await Att.find({
+                        clocked
+                    }).count()
+                    res.render('attendance', {
+                        message: amount
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "You have clocked in", message: amount})
+                    if (error.code === 11000) {
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "You have clocked in",
+                            message: amount
+                        })
                     } else {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "Your bio data does not exist",
+                            message: amount
+                        })
                     }
                 }
             } else if (m.length == 1 && d.length == 2) {
@@ -755,7 +914,7 @@ app.post('/Admin/Att', async (req, res) => {
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -768,24 +927,38 @@ app.post('/Admin/Att', async (req, res) => {
                         lastname
                     })
 
-                    const amount = await Att.find({clocked}).count()
-                    res.render('attendance', {message: amount})
+                    const amount = await Att.find({
+                        clocked
+                    }).count()
+                    res.render('attendance', {
+                        message: amount
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "You have clocked in", message: amount})
+                    if (error.code === 11000) {
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "You have clocked in",
+                            message: amount
+                        })
                     } else {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "Your bio data does not exist",
+                            message: amount
+                        })
                     }
                 }
             } else if (m.length == 2 && d.length == 2) {
-                const dd =  d
+                const dd = d
                 const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -798,24 +971,38 @@ app.post('/Admin/Att', async (req, res) => {
                         lastname
                     })
 
-                    const amount = await Att.find({clocked}).count()
-                    res.render('attendance', {message: amount})
+                    const amount = await Att.find({
+                        clocked
+                    }).count()
+                    res.render('attendance', {
+                        message: amount
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "You have clocked in", message: amount})
+                    if (error.code === 11000) {
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "You have clocked in",
+                            message: amount
+                        })
                     } else {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "Your bio data does not exist",
+                            message: amount
+                        })
                     }
                 }
             } else {
-                const dd = '0'+ d
+                const dd = '0' + d
                 const mm = '0' + m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const data = firstname + date +'2111'
+                const data = firstname + date + '2111'
                 try {
                     await Att.create({
                         data,
@@ -828,15 +1015,29 @@ app.post('/Admin/Att', async (req, res) => {
                         lastname
                     })
 
-                    const amount = await Att.find({clocked}).count()
-                    res.render('attendance', {message: amount})
+                    const amount = await Att.find({
+                        clocked
+                    }).count()
+                    res.render('attendance', {
+                        message: amount
+                    })
                 } catch (error) {
-                    if(error.code === 11000) {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "You have clocked in", message: amount})
+                    if (error.code === 11000) {
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "You have clocked in",
+                            message: amount
+                        })
                     } else {
-                        const amount = await Att.find({clocked}).count()
-                        return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                        const amount = await Att.find({
+                            clocked
+                        }).count()
+                        return res.render('attendance', {
+                            messag: "Your bio data does not exist",
+                            message: amount
+                        })
                     }
                 }
             }
@@ -845,20 +1046,28 @@ app.post('/Admin/Att', async (req, res) => {
             const d = today.getDate().toString();
             const mmm = today.getMonth() + 1;
             const m = mmm.toString();
- 
+
             //m.length is 2 and d.length is 1, m.length is 1 and d.length is 2, m.length is 2 and d.length is 2
-            
+
             if (m.length == 2 && d.length == 1) {
-                const dd = '0'+ d
-                const mm =  m
+                const dd = '0' + d
+                const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const amount = await Att.find({clocked}).count()
-                if(amount == 0) {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: '0'})
+                const amount = await Att.find({
+                    clocked
+                }).count()
+                if (amount == 0) {
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: '0'
+                    })
                 } else {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: amount
+                    })
                 }
             } else if (m.length == 1 && d.length == 2) {
                 const dd = d
@@ -866,78 +1075,130 @@ app.post('/Admin/Att', async (req, res) => {
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const amount = await Att.find({clocked}).count()
-                if(amount == 0) {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: '0'})
+                const amount = await Att.find({
+                    clocked
+                }).count()
+                if (amount == 0) {
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: '0'
+                    })
                 } else {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: amount
+                    })
                 }
             } else if (m.length == 2 && d.length == 2) {
-                const dd =  d
+                const dd = d
                 const mm = m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const amount = await Att.find({clocked}).count()
-                if(amount == 0) {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: '0'})
+                const amount = await Att.find({
+                    clocked
+                }).count()
+                if (amount == 0) {
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: '0'
+                    })
                 } else {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: amount
+                    })
                 }
             } else {
-                const dd = '0'+ d
+                const dd = '0' + d
                 const mm = '0' + m
                 const yyyy = today.getFullYear()
                 const date = dd + "-" + mm + "-" + yyyy
                 const clocked = date
-                const amount = await Att.find({clocked}).count()
-                if(amount == 0) {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: '0'})
+                const amount = await Att.find({
+                    clocked
+                }).count()
+                if (amount == 0) {
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: '0'
+                    })
                 } else {
-                    return res.render('attendance', {messag: "Your bio data does not exist", message: amount})
+                    return res.render('attendance', {
+                        messag: "Your bio data does not exist",
+                        message: amount
+                    })
                 }
             }
         }
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
 app.get("/Admin/Suggestion", async (req, res) => {
-    let sess = req.session 
-    if(sess.user) {
+    let sess = req.session
+    if (sess.user) {
         const suggestion = await Suggestion.find()
 
-        res.render('suggestion', {suggestion: suggestion})
+        res.render('suggestion', {
+            suggestion: suggestion
+        })
     } else {
         res.redirect('/au/login')
     }
 })
 
 app.get("/Admin/Announcement", async (req, res) => {
-    let sess = req.session 
-    if(sess.user) {
+    let sess = req.session
+    if (sess.user) {
 
-        const Dresscode = await Announcement.find({type: "Announcement"})
-        const announcement = await Announcement.find({type: "Announcement"})
-        const Sundaysong = await Announcement.find({type: "Sunday song"})
-        const Tuesdaysong = await Announcement.find({type: "Tuesday song"})
-        const Thursdaysong = await Announcement.find({type: "Thursday song"})
+        const Dresscode = await Announcement.find({
+            type: "Announcement"
+        })
+        const announcement = await Announcement.find({
+            type: "Announcement"
+        })
+        const Sundaysong = await Announcement.find({
+            type: "Sunday song"
+        })
+        const Tuesdaysong = await Announcement.find({
+            type: "Tuesday song"
+        })
+        const Thursdaysong = await Announcement.find({
+            type: "Thursday song"
+        })
 
-        res.render('announcement', {dresscode: Dresscode, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong})
+        res.render('announcement', {
+            dresscode: Dresscode,
+            announcement: announcement,
+            sunday: Sundaysong,
+            tuesday: Tuesdaysong,
+            thursday: Thursdaysong
+        })
     } else {
         res.redirect('/au/login')
     }
 })
 
 app.post("/Admin/Announcement", async (req, res) => {
-    let sess = req.session 
-    if(sess.user) {
-        const Dresscode = await Announcement.find({type: "Announcement"})
-        const announcement = await Announcement.find({type: "Announcement"})
-        const Sundaysong = await Announcement.find({type: "Sunday song"})
-        const Tuesdaysong = await Announcement.find({type: "Tuesday song"})
-        const Thursdaysong = await Announcement.find({type: "Thursday song"})
+    let sess = req.session
+    if (sess.user) {
+        const Dresscode = await Announcement.find({
+            type: "Announcement"
+        })
+        const announcement = await Announcement.find({
+            type: "Announcement"
+        })
+        const Sundaysong = await Announcement.find({
+            type: "Sunday song"
+        })
+        const Tuesdaysong = await Announcement.find({
+            type: "Tuesday song"
+        })
+        const Thursdaysong = await Announcement.find({
+            type: "Thursday song"
+        })
 
         try {
             await Announcement.create({
@@ -946,10 +1207,24 @@ app.post("/Admin/Announcement", async (req, res) => {
                 announcement: req.body.announcement
             })
 
-            res.render('announcement', {message: "Posted Successfully", dresscode: Dresscode, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong})
+            res.render('announcement', {
+                message: "Posted Successfully",
+                dresscode: Dresscode,
+                announcement: announcement,
+                sunday: Sundaysong,
+                tuesday: Tuesdaysong,
+                thursday: Thursdaysong
+            })
         } catch (error) {
             console.log(error)
-            res.render('announcement', {message: "Try again.....", dresscode: Dresscode, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong})
+            res.render('announcement', {
+                message: "Try again.....",
+                dresscode: Dresscode,
+                announcement: announcement,
+                sunday: Sundaysong,
+                tuesday: Tuesdaysong,
+                thursday: Thursdaysong
+            })
         }
     } else {
         res.redirect('/au/login')
@@ -958,9 +1233,9 @@ app.post("/Admin/Announcement", async (req, res) => {
 
 app.get('/Admin/Att/View', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const attendance = await Att.find({}).lean()
-        res.render('attendanceview',{
+        res.render('attendanceview', {
             att: attendance
         })
     } else {
@@ -970,14 +1245,14 @@ app.get('/Admin/Att/View', async (req, res) => {
 
 app.post('/Admin/Send', async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
 
         const level = req.body.level
 
         try {
-            if(level == "all") {
+            if (level == "all") {
                 const member = await Member.find({})
-    
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -985,19 +1260,25 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "100") {
+            } else if (level == "100") {
                 const level = 100
-                const member = await Member.find({level})
-    
+                const member = await Member.find({
+                    level
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1005,19 +1286,25 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "200") {
+            } else if (level == "200") {
                 const level = 200
-                const member = await Member.find({level})
-    
+                const member = await Member.find({
+                    level
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1025,19 +1312,26 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            }if(level == "300") {
+            }
+            if (level == "300") {
                 const level = 300
-                const member = await Member.find({level})
-    
+                const member = await Member.find({
+                    level
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1045,19 +1339,25 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "400") {
+            } else if (level == "400") {
                 const level = 400
-                const member = await Member.find({level})
-    
+                const member = await Member.find({
+                    level
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1065,19 +1365,25 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            }else if(level == "500") {
+            } else if (level == "500") {
                 const level = 500
-                const member = await Member.find({level})
-    
+                const member = await Member.find({
+                    level
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1085,19 +1391,27 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level.includes("100") && level.includes("200")) {
-                const member1 = await Member.find({level: "100"})
-                const member2 = await Member.find({level: "200"})
-    
+            } else if (level.includes("100") && level.includes("200")) {
+                const member1 = await Member.find({
+                    level: "100"
+                })
+                const member2 = await Member.find({
+                    level: "200"
+                })
+
                 member1.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1105,16 +1419,20 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-    
+
                 member2.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1122,20 +1440,30 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level.includes("300") && level.includes("400") && level.includes("500")) {
-                const member1 = await Member.find({level: "300"})
-                const member2 = await Member.find({level: "400"})
-                const member3 = await Member.find({level: "500"})
-    
+            } else if (level.includes("300") && level.includes("400") && level.includes("500")) {
+                const member1 = await Member.find({
+                    level: "300"
+                })
+                const member2 = await Member.find({
+                    level: "400"
+                })
+                const member3 = await Member.find({
+                    level: "500"
+                })
+
                 member1.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1143,16 +1471,20 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-    
+
                 member2.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1160,12 +1492,16 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
@@ -1176,18 +1512,22 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "excos"){
+            } else if (level == "excos") {
                 const member = await Executive.find({})
-    
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1195,18 +1535,24 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "top"){
-                const member = await Member.find({subunit: "Singer"})
-    
+            } else if (level == "top") {
+                const member = await Member.find({
+                    subunit: "Singer"
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1214,18 +1560,24 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "hod"){
-                const member = await Member.find({subunit: "Instrumentalist"})
-    
+            } else if (level == "hod") {
+                const member = await Member.find({
+                    subunit: "Instrumentalist"
+                })
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1233,18 +1585,22 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
-            } else if(level == "applicants") {
+            } else if (level == "applicants") {
                 const member = await Applicants.find({})
-    
+
                 member.forEach(element => {
                     let mailOptions = {
                         from: process.env.EMAIL_USERNAME,
@@ -1252,40 +1608,51 @@ app.post('/Admin/Send', async (req, res) => {
                         subject: req.body.subject,
                         html: req.body.message
                     };
-                
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {  
-                            return res.render('admin', {message: 'Try Again'})
+
+                    transporter.sendMail(mailOptions, function (err, data) {
+                        if (err) {
+                            return res.render('admin', {
+                                message: 'Try Again'
+                            })
                         } else {
-                        return res.render('admin', {message: 'Email has been delivered'})
+                            return res.render('admin', {
+                                message: 'Email has been delivered'
+                            })
                         }
                     });
                 })
             }
         } catch (error) {
             console.log(error)
-            res.render('admin', {message: "Contact the administrator"})
+            res.render('admin', {
+                message: "Contact the administrator"
+            })
         }
-    }  
+    }
 })
 
-app.get("/Admin/Executive", async(req, res) => {
+app.get("/Admin/Executive", async (req, res) => {
     let sess = req.session;
-    if(sess.user) {
+    if (sess.user) {
         const executive = await Executive.find({})
         res.render("executive", {
             excos: executive
         })
     }
-    
+
 })
 
-app.post("/Admin/Executive/Add", async(req, res) => {
+app.post("/Admin/Executive/Add", async (req, res) => {
     let sess = req.session;
-    const {matricno, post} = req.body
-    if(sess.user) {
-        try {  
-            const member = await Member.findOne({matricno})
+    const {
+        matricno,
+        post
+    } = req.body
+    if (sess.user) {
+        try {
+            const member = await Member.findOne({
+                matricno
+            })
 
             const firstname = member.firstname
             const lastname = member.lastname
@@ -1295,7 +1662,7 @@ app.post("/Admin/Executive/Add", async(req, res) => {
                 firstname,
                 lastname,
                 matricno,
-                email, 
+                email,
                 post,
                 level
             })
@@ -1305,95 +1672,114 @@ app.post("/Admin/Executive/Add", async(req, res) => {
                 excos: executiveE
             })
         } catch (error) {
-            if(error.code === 11000){
+            if (error.code === 11000) {
                 const executiveE = await Executive.find({})
-                return res.render('executive', {message: "You have added this person to the list", excos: executiveE})
+                return res.render('executive', {
+                    message: "You have added this person to the list",
+                    excos: executiveE
+                })
             } else {
                 const executiveE = await Executive.find({})
-                res.render('executive', {message: `The person with ${matricno} does not have bio data`, excos: executiveE})
+                res.render('executive', {
+                    message: `The person with ${matricno} does not have bio data`,
+                    excos: executiveE
+                })
                 console.log(error)
             }
         }
-    }else {
+    } else {
         res.redirect('/au/login')
     }
-    
+
 })
 
-app.get('/Updatelevel', async(req, res) => {
+app.get('/Updatelevel', async (req, res) => {
     let sess = req.session
     if (sess.user) {
         try {
             const member = await Member.find({})
             if (member == null) {
-                res.render('admin', {message: "Empty DATABASE"})
+                res.render('admin', {
+                    message: "Empty DATABASE"
+                })
             } else {
                 member.forEach(async mem => {
                     const college = mem.college
                     const level = mem.level
-        
+
                     if (college == "COE" || college == "CAS") {
-                        if(level == "500") {
-                            await Member.deleteMany({level: "500"})
+                        if (level == "500") {
+                            await Member.deleteMany({
+                                level: "500"
+                            })
                             if (level == "400") {
-                                await Member.updateMany(
-                                    {level: "400"},
-                                    {
-                                        $set: {level: "500"}
+                                await Member.updateMany({
+                                    level: "400"
+                                }, {
+                                    $set: {
+                                        level: "500"
                                     }
-                                )
+                                })
                                 if (level == "300") {
-                                    await Member.updateMany(
-                                        {level: "300"},
-                                        {
-                                            $set: {level: "400"}
+                                    await Member.updateMany({
+                                        level: "300"
+                                    }, {
+                                        $set: {
+                                            level: "400"
                                         }
-                                    )
+                                    })
                                     if (level == "200") {
-                                        await Member.updateMany(
-                                            {level: "200"},
-                                            {
-                                                $set: {level: "300"}
+                                        await Member.updateMany({
+                                            level: "200"
+                                        }, {
+                                            $set: {
+                                                level: "300"
                                             }
-                                        )
+                                        })
                                         if (level == "100") {
-                                            await Member.updateMany(
-                                                {level: "100"},
-                                                {
-                                                    $set: {level: "200"}
+                                            await Member.updateMany({
+                                                level: "100"
+                                            }, {
+                                                $set: {
+                                                    level: "200"
                                                 }
-                                            )
+                                            })
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    
+
                     if (college == "CPAS" || college == "CBS") {
-                        if(level == "400") {
-                            await Member.deleteMany({level: "400"})
+                        if (level == "400") {
+                            await Member.deleteMany({
+                                level: "400"
+                            })
                             if (level == "300") {
-                                await Member.updateMany(
-                                    {level: "300"},
-                                    {
-                                        $set: {level: "400"}
+                                await Member.updateMany({
+                                    level: "300"
+                                }, {
+                                    $set: {
+                                        level: "400"
                                     }
-                                )
+                                })
                                 if (level == "200") {
-                                    await Member.updateMany(
-                                        {level: "200"},
-                                        {
-                                            $set: {level: "300"}
+                                    await Member.updateMany({
+                                        level: "200"
+                                    }, {
+                                        $set: {
+                                            level: "300"
                                         }
-                                    )
+                                    })
                                     if (level == "100") {
-                                        await Member.updateMany(
-                                            {level: "100"},
-                                            {
-                                                $set: {level: "200"}
+                                        await Member.updateMany({
+                                            level: "100"
+                                        }, {
+                                            $set: {
+                                                level: "200"
                                             }
-                                        )
+                                        })
                                     }
                                 }
                             }
@@ -1406,70 +1792,87 @@ app.get('/Updatelevel', async(req, res) => {
                 await Choice.deleteMany()
                 await Announcement.deleteMany()
                 await Suggestion.deleteMany()
-                
-                res.render('admin', {message: "Update Completed"})   
+
+                res.render('admin', {
+                    message: "Update Completed"
+                })
             }
         } catch (error) {
-            res.render('admin', {message: "Contact the Adminstrator"})
+            res.render('admin', {
+                message: "Contact the Adminstrator"
+            })
             console.log(error)
-        }   
-    }else {
+        }
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.post('/Delete', async(req, res) => {
+app.post('/Delete', async (req, res) => {
     let sess = req.session
     if (sess.user) {
         try {
             const member = req.body.regno
-            await Member.deleteOne({matricno: member})
-            res.render('admin', {message: "Deleted Successfully"})
-        } catch(error) {    
-            res.render('admin', {message: "Contact the Adminstrator"})
+            await Member.deleteOne({
+                matricno: member
+            })
+            res.render('admin', {
+                message: "Deleted Successfully"
+            })
+        } catch (error) {
+            res.render('admin', {
+                message: "Contact the Adminstrator"
+            })
             console.log(error)
         }
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.get('/Admin/Member/Generate', (req, res)=> {
+app.get('/Admin/Member/Generate', (req, res) => {
     let sess = req.session
     if (sess.user) {
         res.render('generate')
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
 
-app.post('/Admin/Member/Generate', async(req, res) => {
+app.post('/Admin/Member/Generate', async (req, res) => {
     let sess = req.session
     if (sess.user) {
         try {
             const matricno = req.body.matricno
-            const member = await Member.findOne({$or:[ 
-                {matricno: matricno }, 
-                {regno: matricno}
-            ]})
+            const member = await Member.findOne({
+                $or: [{
+                        matricno: matricno
+                    },
+                    {
+                        regno: matricno
+                    }
+                ]
+            })
             const admin = "bakarepraise04@gmail.com"
 
             var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
             var stringLength = 7
             var randomstring = "";
 
-            for (var i=0; i<stringLength; i++) {  
-                var rnum = Math.floor(Math.random() * string.length);  
-                randomstring += string.substring(rnum, rnum+1);
+            for (var i = 0; i < stringLength; i++) {
+                var rnum = Math.floor(Math.random() * string.length);
+                randomstring += string.substring(rnum, rnum + 1);
             }
 
             try {
                 const lastname = member.lastname
                 const firstname = member.firstname
                 const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
-                const password = await bcrypt.hash(randomstring,10)
+                const password = await bcrypt.hash(randomstring, 10)
 
-                const user = await memberauth.findOne({username: username})
+                const user = await memberauth.findOne({
+                    username: username
+                })
 
                 if (!user) {
                     let message = {
@@ -1489,10 +1892,12 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                 </div>`
                     };
 
-                    transporter.sendMail(message,async function(err, data) {
-                        if (err) {  
+                    transporter.sendMail(message, async function (err, data) {
+                        if (err) {
                             console.log(err)
-                            return res.render('generate', {message: 'Try Again'})
+                            return res.render('generate', {
+                                message: 'Try Again'
+                            })
                         } else {
                             try {
                                 await memberauth.create({
@@ -1500,18 +1905,24 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                                     matricno,
                                     password
                                 })
-                                return res.render('generate', {message: 'Done...'})
+                                return res.render('generate', {
+                                    message: 'Done...'
+                                })
                             } catch (error) {
-                                if(error.code === 11000) {
-                                    res.render('generate', {message: 'Account generated already'})
+                                if (error.code === 11000) {
+                                    res.render('generate', {
+                                        message: 'Account generated already'
+                                    })
                                 } else {
-                                    res.render('generate', {message: "Contact the Administrator"})
+                                    res.render('generate', {
+                                        message: "Contact the Administrator"
+                                    })
                                 }
                             }
                         }
                     });
                 } else {
-                    const username = firstname.toLowerCase() + "." +  lastname.toLowerCase() 
+                    const username = firstname.toLowerCase() + "." + lastname.toLowerCase()
                     let message = {
                         from: admin,
                         to: member.email,
@@ -1528,11 +1939,13 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                         </div>
                 </div>`
                     };
-                    
-                    transporter.sendMail(message,async function(err, data) {
-                        if (err) {  
+
+                    transporter.sendMail(message, async function (err, data) {
+                        if (err) {
                             console.log(err)
-                            return res.render('generate', {message: 'Try Again'})
+                            return res.render('generate', {
+                                message: 'Try Again'
+                            })
                         } else {
                             try {
                                 await memberauth.create({
@@ -1540,24 +1953,34 @@ app.post('/Admin/Member/Generate', async(req, res) => {
                                     matricno,
                                     password
                                 })
-                                return res.render('generate', {message: 'Done...'})
+                                return res.render('generate', {
+                                    message: 'Done...'
+                                })
                             } catch (error) {
-                                if(error.code === 11000) {
-                                    res.render('generate', {message: 'Account generated already'})
+                                if (error.code === 11000) {
+                                    res.render('generate', {
+                                        message: 'Account generated already'
+                                    })
                                 } else {
-                                    res.render('generate', {message: "Contact the Administrator"})
+                                    res.render('generate', {
+                                        message: "Contact the Administrator"
+                                    })
                                 }
                             }
                         }
                     });
                 }
             } catch (error) {
-                res.render('generate', {message: "Contact the Administrator"})
+                res.render('generate', {
+                    message: "Contact the Administrator"
+                })
             }
         } catch (error) {
-            res.render('generate', {message: "Contact the Adminstrator"})
+            res.render('generate', {
+                message: "Contact the Adminstrator"
+            })
         }
-    }else {
+    } else {
         res.redirect('/au/login')
     }
 })
@@ -1739,18 +2162,21 @@ app.get('/Member/Service/choice', async(req, res) => {
     }
 }) */
 
-app.post('/Member/au/Login', async(req, res) => {
-   try {
+app.post('/Member/au/Login', async (req, res) => {
+    try {
         const username = req.body.username
         const password = req.body.password
-        const user = await memberauth.findOne({username: username})
+        const user = await memberauth.findOne({
+            username: username
+        })
 
-        if(!user) {
-            res.render('memberauth', {link: "/Member/Generate"})
+        if (!user) {
+            res.render('memberauth', {
+                link: "/Member/Generate"
+            })
         } else {
-            if(await bcrypt.compare(password, user.password)){
-                const token = jwt.sign(
-                    {
+            if (await bcrypt.compare(password, user.password)) {
+                const token = jwt.sign({
                         id: user._id,
                         username: user.username
                     },
@@ -1761,102 +2187,150 @@ app.post('/Member/au/Login', async(req, res) => {
                 sess.token = token
                 res.redirect('/Member')
             } else {
-                return res.render('memberauth' , {message: "Invalid Username or Password"})
+                return res.render('memberauth', {
+                    message: "Invalid Username or Password"
+                })
             }
         }
     } catch (error) {
         console.log(error)
-        return res.render('memberauth' , {message: "There was an issue logging you in"})
+        return res.render('memberauth', {
+            message: "There was an issue logging you in"
+        })
     }
 })
 
-app.get('/Member/au/Login', async(req, res) => {
+app.get('/Member/au/Login', async (req, res) => {
     res.render('memberauth')
 })
 
-app.get('/Member/au/logout', (req ,res)=>{
+app.get('/Member/au/logout', (req, res) => {
     req.session.destroy((err) => {
-        if(err) {
+        if (err) {
             return console.log(err);
         }
-        res.render('memberauth', { title: "Log out", message : "logout Successfully...!"})
+        res.render('memberauth', {
+            title: "Log out",
+            message: "logout Successfully...!"
+        })
     });
 })
 
-app.get('/Member', async(req, res) => {
-    let sess = req.session 
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
-        const att = await Att.find({matricno: member.matricno})
+app.get('/Member', async (req, res) => {
+    let sess = req.session
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
+        const att = await Att.find({
+            matricno: member.matricno
+        })
 
-        var miss = att.filter(function (el)
-            {
-                return el.clocked == "0"
-            }
-        );
+        var miss = att.filter(function (el) {
+            return el.clocked == "0"
+        });
 
-        const missed =  miss.length
+        const missed = miss.length
 
         const held = att.length
 
         const attended = held - missed
 
-        const percentage = (attended/held) * 100
+        const percentage = (attended / held) * 100
 
-        res.render('members', {att: att, attended: attended,profile: memberdetails.dpURL, percentage: percentage, userpart: memberdetails.part, level: memberdetails.level, user: memberdetails.firstname + " " + memberdetails.lastname})
+        res.render('members', {
+            att: att,
+            attended: attended,
+            profile: memberdetails.dpURL,
+            percentage: percentage,
+            userpart: memberdetails.part,
+            level: memberdetails.level,
+            user: memberdetails.firstname + " " + memberdetails.lastname
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
 })
 
-app.post('/Member/changepassword', async(req, res) => {
+app.post('/Member/changepassword', async (req, res) => {
     let sess = req.session
-    if(sess.user) {
-        const {newpassword: plainTextPassword, reEnterPassword} = req.body
+    if (sess.user) {
+        const {
+            newpassword: plainTextPassword,
+            reEnterPassword
+        } = req.body
 
         const token = sess.token
 
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
 
-        if(plainTextPassword.length < 8) {
-            return res.render('changepassword', {message: "Password Should be at least 8 characters",profile: memberdetails.dpURL, level: memberdetails.level,userpart: memberdetails.part, user: memberdetails.firstname + " " + memberdetails.lastname})
+        if (plainTextPassword.length < 8) {
+            return res.render('changepassword', {
+                message: "Password Should be at least 8 characters",
+                profile: memberdetails.dpURL,
+                level: memberdetails.level,
+                userpart: memberdetails.part,
+                user: memberdetails.firstname + " " + memberdetails.lastname
+            })
         }
 
         /* if(plainTextPassword !== reEnterPassword) {
             return res.render('changepassword', {message: "Password not the same", username: sess.user, user: memberdetails.firstname + " " + memberdetails.lastname})
         } */
 
-        try{
+        try {
             const user = jwt.verify(token, process.env.JWT)
             const _id = user.id
 
-            const password = await bcrypt.hash(plainTextPassword,10)
+            const password = await bcrypt.hash(plainTextPassword, 10)
 
-            await memberauth.updateOne(
-                {_id},
-                {
-                    $set: {password: password}
+            await memberauth.updateOne({
+                _id
+            }, {
+                $set: {
+                    password: password
                 }
-            )
+            })
 
             res.redirect('/Member/au/logout')
         } catch (error) {
             console.log(error)
-            res.render('changepassword', {message: "Try again Later",profile: memberdetails.dpURL, level: memberdetails.level, userpart: memberdetails.part, user: memberdetails.firstname + " " + memberdetails.lastname})
+            res.render('changepassword', {
+                message: "Try again Later",
+                profile: memberdetails.dpURL,
+                level: memberdetails.level,
+                userpart: memberdetails.part,
+                user: memberdetails.firstname + " " + memberdetails.lastname
+            })
         }
     } else {
         res.redirect('/Member/au/Login')
     }
 })
 
-app.get('/Member/changepassword', async(req, res) => {
+app.get('/Member/changepassword', async (req, res) => {
     let sess = req.session
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
-        res.render('changepassword', {userpart: memberdetails.part,profile: memberdetails.dpURL, level: memberdetails.level, user: memberdetails.firstname + " " + memberdetails.lastname})
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
+        res.render('changepassword', {
+            userpart: memberdetails.part,
+            profile: memberdetails.dpURL,
+            level: memberdetails.level,
+            user: memberdetails.firstname + " " + memberdetails.lastname
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
@@ -1865,15 +2339,30 @@ app.get('/Member/changepassword', async(req, res) => {
 app.post('/search', async (req, res) => {
     const search = req.body.search
 
-    const member = await Member.find({$or:[ 
-        { matricno: search }, 
-        {firstname: search}, 
-        { lastname: search }, 
-        { middlename: search },
-        { department: search },
-        { college: search }, 
-        { subunit: search }, 
-    ]})
+    const member = await Member.find({
+        $or: [{
+                matricno: search
+            },
+            {
+                firstname: search
+            },
+            {
+                lastname: search
+            },
+            {
+                middlename: search
+            },
+            {
+                department: search
+            },
+            {
+                college: search
+            },
+            {
+                subunit: search
+            },
+        ]
+    })
 
     res.render("admin2", {
         top: member
@@ -1882,13 +2371,23 @@ app.post('/search', async (req, res) => {
 
 app.get('/Choir/leaders', async (req, res) => {
     let sess = req.session
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
 
         const excos = await Executive.find()
 
-        res.render('leader', {userpart: memberdetails.part,profile: memberdetails.dpURL, user: memberdetails.firstname + " " + memberdetails.lastname, exco: excos, level: memberdetails.level})
+        res.render('leader', {
+            userpart: memberdetails.part,
+            profile: memberdetails.dpURL,
+            user: memberdetails.firstname + " " + memberdetails.lastname,
+            exco: excos,
+            level: memberdetails.level
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
@@ -1896,21 +2395,45 @@ app.get('/Choir/leaders', async (req, res) => {
 
 app.get("/Choir/Announcement", async (req, res) => {
     let sess = req.session
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
 
-        const Dresscode = await Announcement.find({type: "Dress code"})
+        const Dresscode = await Announcement.find({
+            type: "Dress code"
+        })
 
-        const announcement = await Announcement.find({type: "Announcement"})
+        const announcement = await Announcement.find({
+            type: "Announcement"
+        })
 
-        const Sundaysong = await Announcement.find({type: "Sunday song"})
+        const Sundaysong = await Announcement.find({
+            type: "Sunday song"
+        })
 
-        const Tuesdaysong = await Announcement.find({type: "Tuesday song"})
+        const Tuesdaysong = await Announcement.find({
+            type: "Tuesday song"
+        })
 
-        const Thursdaysong = await Announcement.find({type: "Thursday song"})
+        const Thursdaysong = await Announcement.find({
+            type: "Thursday song"
+        })
 
-        res.render('announcements', {dresscode: Dresscode,profile: memberdetails.dpURL, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong, userpart: memberdetails.part, user: memberdetails.firstname + " " + memberdetails.lastname, level: memberdetails.level})
+        res.render('announcements', {
+            dresscode: Dresscode,
+            profile: memberdetails.dpURL,
+            announcement: announcement,
+            sunday: Sundaysong,
+            tuesday: Tuesdaysong,
+            thursday: Thursdaysong,
+            userpart: memberdetails.part,
+            user: memberdetails.firstname + " " + memberdetails.lastname,
+            level: memberdetails.level
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
@@ -1918,19 +2441,33 @@ app.get("/Choir/Announcement", async (req, res) => {
 
 app.post("/Formsubmit", async (req, res) => {
     let sess = req.session
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno})
-        
-        const Dresscode = await Announcement.find({type: "Dress code"})
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
 
-        const announcement = await Announcement.find({type: "Announcement"})
+        const Dresscode = await Announcement.find({
+            type: "Dress code"
+        })
 
-        const Sundaysong = await Announcement.find({type: "Sunday song"})
+        const announcement = await Announcement.find({
+            type: "Announcement"
+        })
 
-        const Tuesdaysong = await Announcement.find({type: "Tuesday song"})
+        const Sundaysong = await Announcement.find({
+            type: "Sunday song"
+        })
 
-        const Thursdaysong = await Announcement.find({type: "Thursday song"})
+        const Tuesdaysong = await Announcement.find({
+            type: "Tuesday song"
+        })
+
+        const Thursdaysong = await Announcement.find({
+            type: "Thursday song"
+        })
 
         try {
             await Suggestion.create({
@@ -1939,89 +2476,143 @@ app.post("/Formsubmit", async (req, res) => {
                 suggestion: req.body.message
             })
 
-            res.render('announcements', {message: "Message sent successfully",profile: memberdetails.dpURL, dresscode: Dresscode, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong, userpart: memberdetails.part, user: memberdetails.firstname + " " + memberdetails.lastname, level: memberdetails.level})
+            res.render('announcements', {
+                message: "Message sent successfully",
+                profile: memberdetails.dpURL,
+                dresscode: Dresscode,
+                announcement: announcement,
+                sunday: Sundaysong,
+                tuesday: Tuesdaysong,
+                thursday: Thursdaysong,
+                userpart: memberdetails.part,
+                user: memberdetails.firstname + " " + memberdetails.lastname,
+                level: memberdetails.level
+            })
         } catch (error) {
             console.log(error)
-            res.render('announcements', {message: "Try Again...",profile: memberdetails.dpURL, dresscode: Dresscode, announcement: announcement, sunday: Sundaysong, tuesday: Tuesdaysong, thursday: Thursdaysong, userpart: memberdetails.part, user: memberdetails.firstname + " " + memberdetails.lastname, level: memberdetails.level})
+            res.render('announcements', {
+                message: "Try Again...",
+                profile: memberdetails.dpURL,
+                dresscode: Dresscode,
+                announcement: announcement,
+                sunday: Sundaysong,
+                tuesday: Tuesdaysong,
+                thursday: Thursdaysong,
+                userpart: memberdetails.part,
+                user: memberdetails.firstname + " " + memberdetails.lastname,
+                level: memberdetails.level
+            })
         }
-        
+
     } else {
         res.redirect('/Member/au/Login')
     }
 })
 
-app.get('/Member/Attendance', async(req, res) => {
-    let sess = req.session 
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno })
-        const att = await Att.find({$or:[ 
-            { matricno: memberdetails.matricno }, 
-            {matricno: memberdetails.regno}
-        ]})
+app.get('/Member/Attendance', async (req, res) => {
+    let sess = req.session
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
+        const att = await Att.find({
+            $or: [{
+                    matricno: memberdetails.matricno
+                },
+                {
+                    matricno: memberdetails.regno
+                }
+            ]
+        })
 
-        var miss = att.filter(function (el)
-            {
-                return el.clocked == "0"
-            }
-        );
+        var miss = att.filter(function (el) {
+            return el.clocked == "0"
+        });
 
-        const missed =  miss.length
+        const missed = miss.length
 
         const held = att.length
 
         const attended = held - missed
 
-        const percentage = (attended/held) * 100
-        res.render('Memberattendance', {att: att,held: held, profile: memberdetails.dpURL, attended: attended, percentage: percentage, userpart: memberdetails.part, level: memberdetails.level, user: memberdetails.firstname + " " + memberdetails.lastname})
+        const percentage = (attended / held) * 100
+        res.render('Memberattendance', {
+            att: att,
+            held: held,
+            profile: memberdetails.dpURL,
+            attended: attended,
+            percentage: percentage,
+            userpart: memberdetails.part,
+            level: memberdetails.level,
+            user: memberdetails.firstname + " " + memberdetails.lastname
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
 })
 
 app.get('/Member/Updateinfo', async (req, res) => {
-    let sess = req.session 
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno })
+    let sess = req.session
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
 
-        res.render('register', {details: memberdetails})
+        res.render('register', {
+            details: memberdetails
+        })
     } else {
         res.redirect('/Member/au/Login')
     }
 })
 
 app.post('/Member/Updateinfo', async (req, res) => {
-    let sess = req.session 
-    if(sess.user) {
-        const member = await memberauth.findOne({username: sess.user})
-        const memberdetails = await Member.findOne({matricno: member.matricno })
+    let sess = req.session
+    if (sess.user) {
+        const member = await memberauth.findOne({
+            username: sess.user
+        })
+        const memberdetails = await Member.findOne({
+            matricno: member.matricno
+        })
         try {
-            await Member.updateOne(
-                {matricno: member.matricno}, 
-                {
-                    $set : {
-                        firstname: req.body.firstname || memberdetails.firstname,
-                        middlename: req.body.middlename || memberdetails.middlename,
-                        lastname: req.body.lastname || memberdetails.lastname,
-                        regno: req.body.regno || memberdetails.regno,
-                        matricno: req.body.matricno || memberdetails.matricno,
-                        college: req.body.college || memberdetails.college,
-                        department: req.body.department || memberdetails.department,
-                        instagramID: req.body.instagramID || memberdetails.instagramID,
-                        email: req.body.email || memberdetails.email,
-                        phonenumber: req.body.phonenumber || memberdetails.phonenumber,
-                        roomno: req.body.roomno || memberdetails.roomno,
-                        dob: req.body.dob || memberdetails.dob,
-                        subunit: req.body.subunit || memberdetails.subunit,
-                        part: req.body.part || memberdetails.part,
-                        level: req.body.level || memberdetails.level
-                    }
+            await Member.updateOne({
+                matricno: member.matricno
+            }, {
+                $set: {
+                    firstname: req.body.firstname || memberdetails.firstname,
+                    middlename: req.body.middlename || memberdetails.middlename,
+                    lastname: req.body.lastname || memberdetails.lastname,
+                    regno: req.body.regno || memberdetails.regno,
+                    matricno: req.body.matricno || memberdetails.matricno,
+                    college: req.body.college || memberdetails.college,
+                    department: req.body.department || memberdetails.department,
+                    instagramID: req.body.instagramID || memberdetails.instagramID,
+                    email: req.body.email || memberdetails.email,
+                    phonenumber: req.body.phonenumber || memberdetails.phonenumber,
+                    roomno: req.body.roomno || memberdetails.roomno,
+                    dob: req.body.dob || memberdetails.dob,
+                    subunit: req.body.subunit || memberdetails.subunit,
+                    part: req.body.part || memberdetails.part,
+                    level: req.body.level || memberdetails.level
+                }
             })
-            res.render('register', {details: memberdetails, message: "Updated Successfully"})
+            res.render('register', {
+                details: memberdetails,
+                message: "Updated Successfully"
+            })
         } catch (error) {
             console.log(error)
-            res.render('register', {details: memberdetails, message: "An error occurred"})
+            res.render('register', {
+                details: memberdetails,
+                message: "An error occurred"
+            })
         }
     } else {
         res.redirect('/Member/au/Login')
