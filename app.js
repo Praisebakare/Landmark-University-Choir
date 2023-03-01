@@ -13,35 +13,15 @@ const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const session = require('express-session')
+const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt")
-const {
-    MailtrapClient
-} = require("mailtrap")
-const nodemailer = require("nodemailer")
-/* const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY); */
+const mailgun = require("mailgun-js");
+const DOMAIN = process.env.Domain;
 
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-    cloud_name: process.env.cloud_name,
-    api_key: process.env.api_key,
-    api_secret: process.env.api_secret,
-    secure: true
+const mg = mailgun({
+    apiKey: process.env.API_KEY,
+    domain: DOMAIN
 });
-
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        type: 'OAuth2',
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-        clientId: process.env.OAUTH_CLIENTID,
-        clientSecret: process.env.OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN
-    }
-});
-
 const port = process.env.port || 5000
 const JWT_SECRET_KEY = '#%@^&*#i#jhftrsresxcvghcgfcbnBHS5Q7893$%yv%Yg^*(bJhj)'
 
@@ -61,15 +41,18 @@ db.once("open", function () {
 
 const app = express()
 
-/* app.use(session({secret: 'bakarepraise3',saveUninitialized: true,resave: true})) */
-
-app.set('trust proxy', 1);
-
+const oneDay = 1000 * 60 * 60;
 app.use(session({
-    secret: 'bakarepraise3',
+    secret: process.env.SecretKey,
     saveUninitialized: true,
+    cookie: {
+        maxAge: oneDay
+    },
     resave: false
 }));
+app.use(cookieParser());
+
+app.set('trust proxy', 1);
 
 app.set('view engine', 'ejs');
 
@@ -77,6 +60,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
     extended: true
 }))
+
 
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
@@ -328,6 +312,7 @@ app.post('/Register', async (req, res) => {
                 firstname,
                 middlename,
                 lastname,
+                gender: req.body.gender,
                 regno: req.body.regno,
                 matricno: req.body.matricno,
                 college,
@@ -360,6 +345,7 @@ app.post('/Register', async (req, res) => {
                 firstname,
                 middlename,
                 lastname,
+                gender: req.body.gender,
                 regno: req.body.regno,
                 matricno: req.body.matricno,
                 college,
@@ -424,90 +410,12 @@ app.post('/Member/Add', async (req, res) => {
 
     const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
     const password = await bcrypt.hash(randomstring, 10)
-    const admin = "bakarepraise04@gmail.com"
-
-
-    const user = await memberauth.findOne({})
-
-    if (!user) {
-        try {
-            let message = {
-                from: admin,
-                to: applicant.email,
-                subject: "Tabarnacle of Psalms",
-                html: `<div class="message">
-                <div class="username">
-                    username: ${username}
-                </div> 
-                <div class="password">
-                    password: ${randomstring}
-                </div>
-                <div class="note">
-                    This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
-                </div>
-        </div>`
-            };
-
-            transporter.sendMail(message, async function (err, data) {
-                if (err) {
-                    return res.render('generate', {
-                        message: 'Try Again'
-                    })
-                } else {
-                    try {
-                        await Member.create({
-                            firstname: applicant.firstname,
-                            middlename: applicant.middlename,
-                            lastname: applicant.lastname,
-                            regno: applicant.regno,
-                            matricno: applicant.matricno,
-                            college: applicant.college,
-                            department: applicant.department,
-                            instagramID: applicant.instagramID,
-                            email: applicant.email,
-                            phonenumber: applicant.phonenumber,
-                            roomno: applicant.roomno,
-                            dob: applicant.dob,
-                            subunit: applicant.subunit,
-                            part: applicant.part,
-                            level: applicant.level
-                        })
-                        await memberauth.create({
-                            username,
-                            matricno,
-                            password
-                        })
-                        return res.render('generate', {
-                            message: 'Done...'
-                        })
-                    } catch (error) {
-                        if (error.code === 11000) {
-                            return res.render('generate', {
-                                message: 'Account Exists'
-                            })
-                        } else {
-                            return res.render('generate', {
-                                message: 'Contact the Administrator'
-                            })
-                        }
-                    }
-                }
-            });
-        } catch (error) {
-            res.render('applicants', {
-                message: "Contact the Administrator"
-            })
-        }
-    } else {
-
-
-        try {
-            const username = firstname.toLowerCase() + "." + lastname.toLowerCase()
-            let message = {
-                from: admin,
-                to: applicant.email,
-                subject: "Tabarnacle of Psalms",
-                html: `<div class="message">
+    try {
+        let message = {
+            from: process.env.EMAIL_USERNAME,
+            to: applicant.email,
+            subject: "Tabarnacle of Psalms",
+            html: `<div class="message">
             <div class="username">
                 username: ${username}
             </div> 
@@ -518,56 +426,50 @@ app.post('/Member/Add', async (req, res) => {
                 This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
             </div>
     </div>`
-            };
+        };
 
-            transporter.sendMail(message, async function (err, data) {
-                if (err) {
-                    return res.render('generate', {
-                        message: 'Try Again'
-                    })
-                } else {
-                    try {
-                        await Member.create({
-                            firstname: applicant.firstname,
-                            middlename: applicant.middlename,
-                            lastname: applicant.lastname,
-                            regno: applicant.regno,
-                            matricno: applicant.matricno,
-                            college: applicant.college,
-                            department: applicant.department,
-                            instagramID: applicant.instagramID,
-                            email: applicant.email,
-                            phonenumber: applicant.phonenumber,
-                            roomno: applicant.roomno,
-                            dob: applicant.dob,
-                            subunit: applicant.subunit,
-                            part: applicant.part,
-                            level: applicant.level
-                        })
-                        await memberauth.create({
-                            username,
-                            matricno,
-                            password
-                        })
-                        return res.render('generate', {
-                            message: 'Done...'
-                        })
-                    } catch (error) {
-                        if (error.code === 11000) {
-                            return res.render('generate', {
-                                message: 'Account Exists'
-                            })
-                        } else {
-                            return res.render('generate', {
-                                message: 'Contact the Administrator'
-                            })
-                        }
-                    }
-                }
-            });
-        } catch (error) {
-            res.render('applicants', {
-                message: "Contact the Administrator"
+        mg.messages().send(message, async function (error, body) {
+
+            if (error) {
+                return res.render('generate', {
+                    message: 'Try Again'
+                })
+            } else {
+                await Member.create({
+                    firstname: applicant.firstname,
+                    middlename: applicant.middlename,
+                    lastname: applicant.lastname,
+                    regno: applicant.regno,
+                    matricno: applicant.matricno,
+                    college: applicant.college,
+                    department: applicant.department,
+                    instagramID: applicant.instagramID,
+                    email: applicant.email,
+                    phonenumber: applicant.phonenumber,
+                    roomno: applicant.roomno,
+                    dob: applicant.dob,
+                    subunit: applicant.subunit,
+                    part: applicant.part,
+                    level: applicant.level
+                })
+                await memberauth.create({
+                    username,
+                    matricno,
+                    password
+                })
+                return res.render('generate', {
+                    message: 'Done...'
+                })
+            }
+        });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.render('generate', {
+                message: 'Account Exists'
+            })
+        } else {
+            return res.render('generate', {
+                message: 'Contact the Administrator'
             })
         }
     }
@@ -1261,8 +1163,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1287,8 +1190,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1313,8 +1217,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1340,8 +1245,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1366,8 +1272,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1392,8 +1299,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1420,8 +1328,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1441,8 +1350,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1472,8 +1382,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1493,8 +1404,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1513,8 +1425,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1536,8 +1449,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1561,8 +1475,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1586,8 +1501,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1609,8 +1525,9 @@ app.post('/Admin/Send', async (req, res) => {
                         html: req.body.message
                     };
 
-                    transporter.sendMail(mailOptions, function (err, data) {
-                        if (err) {
+                    mg.messages().send(mailOptions, async function (error, body) {
+
+                        if (error) {
                             return res.render('admin', {
                                 message: 'Try Again'
                             })
@@ -1853,7 +1770,6 @@ app.post('/Admin/Member/Generate', async (req, res) => {
                     }
                 ]
             })
-            const admin = "bakarepraise04@gmail.com"
 
             var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
             var stringLength = 7
@@ -1869,111 +1785,50 @@ app.post('/Admin/Member/Generate', async (req, res) => {
                 const firstname = member.firstname
                 const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
                 const password = await bcrypt.hash(randomstring, 10)
+                let message = {
+                    from: process.env.EMAIL_USERNAME,
+                    to: member.email,
+                    subject: "Tabarnacle of Psalms",
+                    html: `<div class="message">
+                    <div class="username">
+                        username: ${username}
+                    </div> 
+                    <div class="password">
+                        password: ${randomstring}
+                    </div>
+                    <div class="note">
+                        This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
+                    </div>
+            </div>`
+                };
+                mg.messages().send(message, async function (error, body) {
 
-                const user = await memberauth.findOne({
-                    username: username
-                })
+                    if (error) {
 
-                if (!user) {
-                    let message = {
-                        from: admin,
-                        to: member.email,
-                        subject: "Tabarnacle of Psalms",
-                        html: `<div class="message">
-                        <div class="username">
-                            username: ${username}
-                        </div> 
-                        <div class="password">
-                            password: ${randomstring}
-                        </div>
-                        <div class="note">
-                            This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
-                        </div>
-                </div>`
-                    };
-
-                    transporter.sendMail(message, async function (err, data) {
-                        if (err) {
-                            console.log(err)
-                            return res.render('generate', {
-                                message: 'Try Again'
-                            })
-                        } else {
-                            try {
-                                await memberauth.create({
-                                    username,
-                                    matricno,
-                                    password
-                                })
-                                return res.render('generate', {
-                                    message: 'Done...'
-                                })
-                            } catch (error) {
-                                if (error.code === 11000) {
-                                    res.render('generate', {
-                                        message: 'Account generated already'
-                                    })
-                                } else {
-                                    res.render('generate', {
-                                        message: "Contact the Administrator"
-                                    })
-                                }
-                            }
-                        }
-                    });
-                } else {
-                    const username = firstname.toLowerCase() + "." + lastname.toLowerCase()
-                    let message = {
-                        from: admin,
-                        to: member.email,
-                        subject: "Tabarnacle of Psalms",
-                        html: `<div class="message">
-                        <div class="username">
-                            username: ${username}
-                        </div> 
-                        <div class="password">
-                            password: ${randomstring}
-                        </div>
-                        <div class="note">
-                            This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
-                        </div>
-                </div>`
-                    };
-
-                    transporter.sendMail(message, async function (err, data) {
-                        if (err) {
-                            console.log(err)
-                            return res.render('generate', {
-                                message: 'Try Again'
-                            })
-                        } else {
-                            try {
-                                await memberauth.create({
-                                    username,
-                                    matricno,
-                                    password
-                                })
-                                return res.render('generate', {
-                                    message: 'Done...'
-                                })
-                            } catch (error) {
-                                if (error.code === 11000) {
-                                    res.render('generate', {
-                                        message: 'Account generated already'
-                                    })
-                                } else {
-                                    res.render('generate', {
-                                        message: "Contact the Administrator"
-                                    })
-                                }
-                            }
-                        }
-                    });
-                }
+                        return res.render('generate', {
+                            message: 'Try Again'
+                        })
+                    } else {
+                        await memberauth.create({
+                            username,
+                            matricno,
+                            password
+                        })
+                        return res.render('generate', {
+                            message: 'Done...'
+                        })
+                    }
+                });
             } catch (error) {
-                res.render('generate', {
-                    message: "Contact the Administrator"
-                })
+                if (error.code === 11000) {
+                    res.render('generate', {
+                        message: 'Account generated already'
+                    })
+                } else {
+                    res.render('generate', {
+                        message: "Contact the Administrator"
+                    })
+                }
             }
         } catch (error) {
             res.render('generate', {
@@ -1984,183 +1839,6 @@ app.post('/Admin/Member/Generate', async (req, res) => {
         res.redirect('/au/login')
     }
 })
-
-/* app.post('/Admin/Member/All', async(req, res) => {
-    let sess = req.session
-    if (sess.user) {
-        try {
-            const member = await Member.find({})
-
-            var string = 'ZabW1c2X4dY5e7T8f90VgU@hSR!hiPQOjNkMLlKmnAoBpCqDrEsFtGuHvIxJyz'
-            var stringLength = 7
-            var randomstring = "";
-
-            for (var i=0; i<stringLength; i++) {  
-                var rnum = Math.floor(Math.random() * string.length);  
-                randomstring += string.substring(rnum, rnum+1);
-            }
-
-            try {
-                member.forEach(async element => {
-                    const matricno =  element.matricno
-                    const lastname = element.lastname
-                    const firstname = element.firstname
-                    const username = lastname.toLowerCase() + "." + firstname.toLowerCase()
-                    const password = await bcrypt.hash(randomstring,10)
-
-                    const user = await memberauth.findOne({username: username})
-                    if (!user) {
-                        let message = {
-                            from: process.env.EMAIL_USERNAME,
-                            to: element.email,
-                            subject: "Tabarnacle of Psalms",
-                            html: `<div class="message">
-                            <div class="username">
-                                username: ${username}
-                            </div> 
-                            <div class="password">
-                                password: ${randomstring}
-                            </div>
-                            <div class="note">
-                                This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
-                            </div>
-                    </div>`
-                        };
-                        transporter.sendMail(message,async function(err, data) {
-                            if (err) {  
-                                console.log(error)
-                                return res.render('generate', {message: 'Try Again'})
-                            } else {
-                                await memberauth.create({
-                                    username,
-                                    matricno,
-                                    password
-                                })
-                                return res.render('generate', {message: 'Done...'})
-                            }
-                        });
-                    } else {
-                        const username = firstname.toLowerCase() + "." +  lastname.toLowerCase() 
-                        let message = {
-                            from: process.env.EMAIL_USERNAME,
-                            to: element.email,
-                            subject: "Tabarnacle of Psalms",
-                            html: `<div class="message">
-                            <div class="username">
-                                username: ${username}
-                            </div> 
-                            <div class="password">
-                                password: ${randomstring}
-                            </div>
-                            <div class="note">
-                                This is your username and password to access the choir portal.Login <a href="https://choir-lmu.onrender.com/Member/au/Login">here</a> to change your password, view your attendance, announcements, team leaders, and provide suggestions
-                            </div>
-                    </div>`
-                        };
-                        
-                        transporter.sendMail(message,async function(err, data) {
-                            if (err) {  
-                                return res.render('generate', {message: 'Try Again'})
-                            } else {
-                                await memberauth.create({
-                                    username,
-                                    matricno,
-                                    password
-                                })
-                                return res.render('generate', {message: 'Done...'})
-                            }
-                        });
-                    }
-                })  
-            } catch (error) {
-                if(error.code === 11000) {
-                    res.render('generate', {message: 'Account generated already'})
-                } else {
-                    res.render('generate', {message: "Contact the Administrator"})
-                    console.log(error)
-                }
-            }      
-        } catch (error) {
-            res.render('generate', {message: "Contact the Adminstrator"})
-            console.log(error)
-        }
-    }else {
-        res.redirect('/au/login')
-    }
-}) */
-
-
-/* //Service Selection
-var x = 100
-var y = 70
-app.post('/Member/Service/choice', async(req, res) => {
-    let sess = req.session
-    if(sess.user) {
-        const serviceChoice = req.body.pudate
-        const timeoutScheduled = 5
-        const dated = new Date()
-
-        const dd = dated.getDay()
-        const mm = dated.getMonth()
-        const yyyy = dated.getFullYear()
-
-        const date = dd + "-" + mm + "-" + yyyy
-        
-        const member = await memberauth.findOne({username: sess.user})
-        const matricno = member.matricno
-
-        if(date.getDay() == timeoutScheduled) {
-            await Choice.create({
-                matricno,
-                date,
-                serviceChoice
-            })
-
-            if(serviceChoice == '1st Service') {
-                var amount1 = x--
-            } else {  
-                var amount2 = y--
-            }
-
-            const table = await Choice.find({matricno: matricno}).lean()
-            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, message: 'You have selected For the week', tab: table})
-        }
-    } else {
-        res.redirect('/Member/au/Login')
-    }
-})
-
-app.get('/Member/Service/choice', async(req, res) => {
-    let sess = req.session
-    if(sess.user) {
-        const timeoutScheduled = 5
-        const date = new Date()
-        const member = await memberauth.findOne({username: sess.user})
-        const matricno = member.matricno
-
-        const table = await Choice.find({matricno: matricno}).lean()
-
-        if(date.getDay() !== timeoutScheduled) {
-            res.render('servicechoice', {message: 'Selection Closed For the Week', tab: table})
-        } else {
-            table.forEach(element => {
-                const dateDone = element.date
-                const dateTest = new Date()
-                console.log(dateDone)
-                console.log(dateTest)
-                if (date == dateDone) {
-                    res.render('servicechoice', {message: 'You have selected your service', tab: table})
-                }
-            });
-            
-            var amount1 = x
-            var amount2 = y
-            res.render('servicechoice', {firstoption: amount1, secondoption: amount2, tab: table})
-        }
-    } else {
-        res.redirect('/Member/au/Login')
-    }
-}) */
 
 app.post('/Member/au/Login', async (req, res) => {
     try {
@@ -2334,6 +2012,99 @@ app.get('/Member/changepassword', async (req, res) => {
     } else {
         res.redirect('/Member/au/Login')
     }
+})
+
+app.get('/Accountrecovery', async (req, res) => {
+    res.render('accountrec')
+})
+
+app.post('/Accountrecovery', async (req, res) => {
+    const name = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname
+    }
+    const username = name.lastname.toLowerCase() + "." + name.firstname.toLowerCase()
+
+    const member = await Member.findOne({
+        firstname: name.firstname,
+        lastname: name.lastname
+    })
+
+    const user = await memberauth.findOne({
+        username: username
+    })
+
+    if (!user)
+        return res.render('accountrec', {
+            message: "Account does not exist"
+        })
+
+    const token = jwt.sign({
+            id: user._id,
+            username: user.username
+        },
+        JWT_SECRET_KEY
+    )
+
+    console.log(token)
+
+    const data = {
+        from: process.env.EMAIL_USERNAME,
+        to: member.email,
+        subject: "Account Recovery",
+        html: `<div class="message">
+        <div class="note">
+            Click <a href="https://choir-lmu.onrender.com/Accountrecovery/${token}">here</a> to recover your account
+        </div>
+</div>`
+    };
+
+    mg.messages().send(data, async function (error, body) {
+
+        if (error) {
+            console.log(error)
+            res.render('accountrec', {
+                message: "An error occurred"
+            })
+        } else {
+            res.render('accountrec', {
+                message: "An account recovery link has been sent to your mail"
+            })
+        }
+    });
+
+})
+
+app.get('/Accountrecovery/:id', (req, res) => {
+    let sess = req.session
+    const {
+        id: token
+    } = req.params
+    sess.token = token
+    res.render('accountrecChange')
+})
+
+app.post('/Accountrecovery/valid', async (req, res) => {
+    const newpassword = req.body.password
+
+    let sess = req.session
+
+    token = sess.token
+    const user = jwt.verify(token, process.env.JWT)
+    const _id = user.id
+
+    const password = await bcrypt.hash(newpassword, 10)
+
+    await memberauth.updateOne({
+        _id
+    }, {
+        $set: {
+            password: password
+        }
+    })
+    res.render('memberauth', {
+        message: "Account recovered successfully"
+    })
 })
 
 app.post('/search', async (req, res) => {
@@ -2589,6 +2360,7 @@ app.post('/Member/Updateinfo', async (req, res) => {
                     firstname: req.body.firstname || memberdetails.firstname,
                     middlename: req.body.middlename || memberdetails.middlename,
                     lastname: req.body.lastname || memberdetails.lastname,
+                    gender: req.body.gender || memberdetails.gender,
                     regno: req.body.regno || memberdetails.regno,
                     matricno: req.body.matricno || memberdetails.matricno,
                     college: req.body.college || memberdetails.college,
